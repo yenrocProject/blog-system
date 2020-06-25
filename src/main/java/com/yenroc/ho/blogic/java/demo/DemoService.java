@@ -64,6 +64,9 @@ public class DemoService {
         Demo demo = new Demo();
         demo.setId(id);
         List<Demo> selectResult = demoDao.select(demo);
+        if (selectResult.size() == 0) {
+            return null;
+        }
         DemoRespS01 result = new DemoRespS01();
         BeanCopierEx.copy(selectResult.get(0), result);
         return result;
