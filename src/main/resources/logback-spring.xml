@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- 参考资料:https://blog.csdn.net/u011271894/article/details/75735915
+				:https://blog.csdn.net/liuweixiao520/article/details/78900779 -->
+<configuration scan="true">
+	<include resource="org/springframework/boot/logging/logback/base.xml"/>
+	<!-- console打印 -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+	<!-- 生成文件 -->
+	<!-- RollingFileAppender：滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->  
+    <!-- 以下的大概意思是：1.先按日期存日志，日期变了，将前一天的日志文件名重命名为XXX%日期%索引，新的日志仍然是sys.log -->  
+    <!--             2.如果日期没有发生变化，但是当前日志的文件大小超过1KB时，对当前日志进行分割 重命名--> 
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        	<!-- Linux文件路径:/home/_xyy_/output/SpringBootDemo/logs/stdout.logFile.%d{yyyy-MM-dd}.log -->
+        	<!-- Windows文件路径:E:\\logs\\temp\\logFile.%d{yyyy-MM-dd}.log -->
+            <fileNamePattern>E:\\logs\\temp\\logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<maxFileSize>1MB</maxFileSize>
+		</triggeringPolicy>
+        <encoder>
+        	<!-- 记录日志的编码 -->  
+            <charset>utf-8</charset>
+            <!-- pattern节点，用来设置日志的输入格式 -->  
+            <pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <!-- 输出日志级别 -->
+    <root level="#logback.loglevel#">
+		<appender-ref ref="FILE"></appender-ref>
+	</root>
+	
+	<!-- 指定项目中某个包，当有日志操作行为时的日志记录级别 ,将引用的jar的log级别设置成warn--> 
+	<!-- 级别依次为【从高到低】：FATAL > ERROR > WARN > INFO > DEBUG > TRACE  -->  
+	<logger name="com.yenroc.ho" level="DEBUG"/>
+	
+	<logger name="javax.activation" level="WARN"/>
+    <logger name="javax.mail" level="INFO"/>
+    <logger name="javax.xml.bind" level="WARN"/>
+    <logger name="ch.qos.logback" level="WARN"/>
+    <logger name="com.codahale.metrics" level="WARN"/>
+    <logger name="com.netflix" level="WARN"/>
+    <logger name="com.netflix.discovery" level="INFO"/>
+    <logger name="com.ryantenney" level="WARN"/>
+    <logger name="com.sun" level="WARN"/>
+    <logger name="com.zaxxer" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/>
+    <logger name="io.undertow.websockets.jsr" level="ERROR"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+    <logger name="org.bson" level="WARN"/>
+    <logger name="org.hibernate.validator" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+    <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+    <logger name="org.mybatis.spring" level="WARN"/>
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.web" level="WARN"/>
+    <logger name="org.springframework.security" level="WARN"/>
+    <logger name="org.springframework.cache" level="WARN"/>
+    <logger name="org.thymeleaf" level="WARN"/>
+    <logger name="org.xnio" level="WARN"/>
+    <logger name="springfox" level="WARN"/>
+    <logger name="sun.rmi" level="WARN"/>
+    <logger name="liquibase" level="WARN"/>
+    <logger name="LiquibaseSchemaResolver" level="INFO"/>
+    <logger name="sun.net.www" level="INFO"/>
+    <logger name="sun.rmi.transport" level="WARN"/>
+</configuration>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  描述:[demo][demo]查询方法的sql文件
+ @version: 0_1
+ @author: AutoGenerate
+ @date: 2019年9月20日
+ -->
+<!--指定dao -->
+<mapper namespace="com.yenroc.ho.mapper.DemoDao">
+	<!--查询-->
+	<select id="DemoSQL01"
+			useCache="true"
+			parameterType="com.yenroc.ho.blogic.sqlDto.demo.DemoSQL01IM"
+			resultType="com.yenroc.ho.blogic.sqlDto.demo.DemoSQL01OM">
+		SELECT
+			id,
+			name,
+			age,
+			salary,
+			birthDay,
+			created_by AS createdBy,
+			created_date AS createdDate,
+			last_modified_by AS lastModifiedBy,
+			last_modified_date AS lastModifiedDate,
+			is_del AS isDel
+		FROM
+			demo
+		<where>
+			(IS_DEL = 0 OR IS_DEL IS NULL)
+			<if test="id != null and id != ''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				AND name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="age != null and age != ''">
+				AND age = #{age, jdbcType=INTEGER}
+			</if>
+			<if test="salary != null and salary != ''">
+				AND salary = #{salary, jdbcType=DECIMAL}
+			</if>
+			<if test="birthDay != null and birthDay != ''">
+				AND birthDay = #{birthDay, jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+	<!--插入-->
+	<insert id="DemoSQL02"
+			parameterType="com.yenroc.ho.blogic.sqlDto.demo.DemoSQL02IM">
+        INSERT INTO
+            demo (
+                id,
+                name,
+                age,
+                salary,
+                birthDay,
+                created_by,
+                created_date,
+                last_modified_by,
+                last_modified_date,
+                is_del )
+        VALUES (
+            #{id,jdbcType=VARCHAR},
+            #{name,jdbcType=VARCHAR},
+            #{age,jdbcType=INTEGER},
+            #{salary,jdbcType=DECIMAL},
+            #{birthDay,jdbcType=TIMESTAMP},
+            #{createdBy, jdbcType=VARCHAR},
+            #{createdDate, jdbcType=TIMESTAMP},
+            #{lastModifiedBy, jdbcType=VARCHAR},
+            #{lastModifiedDate, jdbcType=TIMESTAMP},
+            #{isDel, jdbcType=TINYINT}
+            )
+    </insert>
+
+	<!--改-->
+	<update id="DemoSQL03"
+			parameterType="com.yenroc.ho.blogic.sqlDto.demo.DemoSQL03IM">
+        UPDATE
+            demo
+        SET
+            name = #{name,jdbcType=VARCHAR},
+            age = #{age,jdbcType=INTEGER},
+            salary = #{salary,jdbcType=DECIMAL},
+            birthDay = #{birthDay,jdbcType=TIMESTAMP},
+            LAST_MODIFIED_BY = #{lastModifiedBy, jdbcType=VARCHAR},
+            LAST_MODIFIED_DATE = #{lastModifiedDate, jdbcType=TIMESTAMP}
+        WHERE
+            ID = #{id, jdbcType=VARCHAR}
+    </update>
+
+	<!-- ========================自定义查询：对应mapper/**Dao接口方法==================================  -->
+    <!-- demoDao 自定义查询 -->
+    <select id="queryDemo"
+			parameterType="com.yenroc.ho.mapper.entity.Demo"
+        	resultType="com.yenroc.ho.mapper.entity.Demo">
+        select
+			id,
+			name,
+			age,
+			salary,
+			birthDay
+		from 
+			demo
+		<where>
+			(IS_DEL = 0 OR IS_DEL IS NULL)
+			<if test="id != null and id != ''">
+				AND id = #{id, jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				AND name LIKE CONCAT('%', #{name, jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="age != null">
+				AND age = #{age, jdbcType=INTEGER}
+			</if>
+			<if test="salary != null">
+				AND salary = #{salary, jdbcType=DECIMAL}
+			</if>
+			<if test="birthDay != null">
+				AND birthDay = #{birthDay, jdbcType=TIMESTAMP}
+			</if>
+		</where>
+    </select>
+</mapper>

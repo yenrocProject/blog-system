@@ -1,0 +1,13 @@
+server:
+    port: 8089
+spring:
+    application:
+        name: springboot-project-demo
+    redis:
+        host: 134.175.91.16
+    
+jhipster:
+    async:
+        core-pool-size: 2
+        max-pool-size: 50
+        queue-capacity: 10000
