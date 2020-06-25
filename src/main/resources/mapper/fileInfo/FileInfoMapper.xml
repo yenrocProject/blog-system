@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  描述:[File]查询方法的sql文件
+ @version: 0_1
+ @author: yenroc
+ @date: 2020年6月25日
+ -->
+<!--指定dao -->
+<mapper namespace="com.yenroc.ho.mapper.FileInfoDao">
+	<!--查询-->
+	<select id="findByFileName"
+			useCache="true"
+			parameterType="java.lang.String"
+			resultType="com.yenroc.ho.mapper.entity.FileInfo">
+		SELECT
+			id,
+			fileName,
+			fileFullName,
+			fileOriginalName,
+			fileSize,
+			created_by AS createdBy,
+			created_date AS createdDate,
+			last_modified_by AS lastModifiedBy,
+			last_modified_date AS lastModifiedDate,
+			is_del AS isDel
+		FROM
+			file
+		WHERE
+			fileName = #{fileName, jdbcType=VARCHAR}
+	</select>
+
+</mapper>
