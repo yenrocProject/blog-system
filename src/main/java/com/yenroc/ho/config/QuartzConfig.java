@@ -18,12 +18,12 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * 加载配置文件 对quartz进行实例化和属性设置 注意 使用集群方案 需要连接数据库，而内存版则不用配置数据库
+ * 加载配置文件 对quartz进行实例化和属性设置
  */
 @Configuration
 public class QuartzConfig {
 
-    public static final String QUARTZ_PROPERTIES_PATH = "spring.quartz.properties";
+    public static final String QUARTZ_PROPERTIES_PATH = "spring-quartz.properties";
 
     /**
      * 配置JobFactory
@@ -90,5 +90,4 @@ public class QuartzConfig {
             return job;
         }
     }
-
 }

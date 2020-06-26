@@ -18,5 +18,4 @@ public class QuartzJobFactory extends SpringBeanJobFactory {
         autowireCapableBeanFactory.autowireBean(jobInstance);
         return jobInstance;
     }
-
 }
