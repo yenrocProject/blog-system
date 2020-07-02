@@ -1,9 +1,7 @@
 package com.yenroc.ho.mapper.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Table(name="album")
@@ -13,7 +11,7 @@ public class Album implements Serializable {
 
     @Column(name = "id")
     @Id
-    private Integer id;
+    private String id;
 
     @Column(name = "album_user_id")
     private Integer albumUserId;
@@ -24,11 +22,11 @@ public class Album implements Serializable {
     @Column(name = "album_name")
     private String albumName;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

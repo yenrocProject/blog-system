@@ -1,6 +1,7 @@
 package com.yenroc.ho.mapper.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -10,16 +11,20 @@ public class AlbumPhoto implements Serializable {
     private static final long serialVersionUID = -7241063697538687240L;
 
     @Column(name = "id")
+    @Id
     private Integer id;
 
     @Column(name = "album_id")
-    private Integer albumId;
+    private String albumId;
 
     @Column(name = "photo_url")
     private String photoUrl;
 
     @Column(name = "file_id")
     private String fileId;
+
+    @Column(name = "template_photo_id")
+    private Integer templatePhotoId;
 
     public Integer getId() {
         return id;
@@ -29,11 +34,11 @@ public class AlbumPhoto implements Serializable {
         this.id = id;
     }
 
-    public Integer getAlbumId() {
+    public String getAlbumId() {
         return albumId;
     }
 
-    public void setAlbumId(Integer albumId) {
+    public void setAlbumId(String albumId) {
         this.albumId = albumId;
     }
 
@@ -51,5 +56,13 @@ public class AlbumPhoto implements Serializable {
 
     public void setFileId(String fileId) {
         this.fileId = fileId;
+    }
+
+    public Integer getTemplatePhotoId() {
+        return templatePhotoId;
+    }
+
+    public void setTemplatePhotoId(Integer templatePhotoId) {
+        this.templatePhotoId = templatePhotoId;
     }
 }

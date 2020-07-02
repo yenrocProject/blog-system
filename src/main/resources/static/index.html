@@ -8,26 +8,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <title>相册编辑</title>
 </head>
 <body>
 	<h2>创建用户</h2>
 	<div id='createUser'>
 		<div>
-			创建用户 <input name='username'/>
-			<button>创建</button>
+			创建用户: <input id='username'/>
+			用户密码: <input id='password' type="password"/>
+			<button onclick="createUser()">创建</button>
 		</div>
 	<div>
 	<hr/>
 	<h2>创建相册</h2>
 	<div id='createAlbum'>
 		<div>
-			选择用户: <select>
+			选择用户: <select id="albumUserSelect">
 							<option value="1">用户1</option>
 							<option value="2">用户2</option>
 							<option value="3">用户3</option>
 						</select>
-			选择模板：<select>
+			选择模板：<select id="albumTemplateSelect">
 							<option value="1">3D互动相册</option>
 							<option value="2">正方体相册</option>
 							<option value="3">圆盘相册</option>
@@ -56,7 +58,72 @@
 	</div>
 	
 	<script type="text/javascript">
-        
+        var root_url = "";
+		window.onload = function() {
+			console.log("加载用户");
+			$("#albumUserSelect").empty();
+			$.ajax({
+				type: 'POST',
+				url: root_url + "/api/albumUser/query" ,
+				cache:false,
+				dataType: "json",
+				data: JSON.stringify({}),
+				headers: { "Content-Type": "application/json;charset=utf-8" },
+				success: function(data){
+					console.log(data);
+					if (data.responseCode === 200){
+						if (data.dataResult.length > 0) {
+							$.each(data.dataResult,function(index,value){
+								console.log(index,value);
+							});
+						}
+					} else {
+						alert('用户加载失败');
+					}
+				}
+			});
+			$.ajax({
+				type: 'POST',
+				url: root_url + "/api/albumTemplate/query" ,
+				cache:false,
+				dataType: "json",
+				data: JSON.stringify({}),
+				headers: { "Content-Type": "application/json;charset=utf-8" },
+				success: function(data){
+					console.log(data);
+					if (data.responseCode === '200'){
+						if (data.dataResult.length > 0) {
+							$.each(data.dataResult,function(index,value){
+								console.log(index,value);
+							});
+						}
+					} else {
+						alert('模板加载失败');
+					}
+				}
+			});
+		};
+		function createUser(){
+			var username = $("#username").val();
+			var password = $("#password").val();
+			// $.post(root_url + "/api/albumUser/create",
+			// 		{name: username, password:password},
+			// 		function(data,status){
+			// 			console.log(data,status);
+			// 		}
+			// );
+			$.ajax({
+				type: 'POST',
+				url: root_url + "/api/albumUser/create" ,
+				cache:false,
+				dataType: "json",
+				data: JSON.stringify({name: username, password:password}),
+				headers: { "Content-Type": "application/json;charset=utf-8" },
+				success: function(data){
+					console.log(data);
+				}
+			})
+		}
 	</script>
 </body>
 </html>

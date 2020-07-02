@@ -1,6 +1,7 @@
 package com.yenroc.ho.mapper.entity;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ public class AlbumTemplatePhotoConfig implements Serializable {
     private static final long serialVersionUID = -7241063697538687240L;
 
     @Column(name = "id")
+    @Id
     private Integer id;
 
     @Column(name = "album_template_id")
