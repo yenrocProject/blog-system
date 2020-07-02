@@ -38,18 +38,29 @@ public class AlbumResource {
     private AlbumTemplatePhotoConfigDao albumTemplatePhotoConfigDao;
 
     private final String default_url = "/usr/local/webserver/nginx/html";
+    private final String default_url_window = "C:/Users/EDZ/Desktop/bootstrap-vue";
 
-    @PostMapping("/albumUser/insert")
-    @ApiOperation(value="创建根相册", notes="创建根相册")
-    public ResponseEntity<ResponseResult> demoInsert(@RequestBody AlbumUser albumUser) throws Exception {
+    @PostMapping("/albumUser/create")
+    @ApiOperation(value="创建相册用户", notes="创建相册用户")
+    public ResponseEntity<ResponseResult> albumUserCreate(@RequestBody AlbumUser albumUser) throws Exception {
 
 
         return new ResponseEntity<>(ResponseResult.success(null), HttpStatus.OK);
     }
 
+    @PostMapping("/album/create")
+    @ApiOperation(value="创建用户相册页面", notes="创建用户相册页面")
+    public ResponseEntity<ResponseResult> albumCreate(@RequestBody Album album) throws Exception {
+
+
+        return new ResponseEntity<>(ResponseResult.success(null), HttpStatus.OK);
+    }
+
+
     @PostMapping("/albumPhoto/upload")
-    @ApiOperation(value="上传相册", notes="上传相册")
-    public ResponseEntity<ResponseResult> demoInsert(@RequestBody AlbumPhoto albumPhoto, HttpServletRequest request) throws Exception {
+    @ApiOperation(value="用户上传图片", notes="用户上传图片")
+    public ResponseEntity<ResponseResult> albumPhotoUpload(@RequestBody AlbumPhoto albumPhoto,
+                                                       HttpServletRequest request) throws Exception {
 
 
         return new ResponseEntity<>(ResponseResult.success(null), HttpStatus.OK);
