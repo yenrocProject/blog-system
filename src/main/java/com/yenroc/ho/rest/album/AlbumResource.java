@@ -47,8 +47,8 @@ public class AlbumResource {
     @Autowired
     private FIleService fIleService;
 
-//    private final String default_url = "/usr/local/webserver/nginx/html";
-    private final String default_url ="E:/heyanpeng/Desktop/3d相册源码";
+    private final String default_url = "/usr/local/webserver/nginx/html";
+//    private final String default_url ="E:/heyanpeng/Desktop/3d相册源码";
 
     private final String default_url_user = default_url + "/{0}";
     private final String default_url_images = default_url + "/{0}/images";
