@@ -66,20 +66,22 @@ public class AlbumResource {
         if (selectResult.size() > 0) {
             throw new BizLogicException(new SystemMessage("USER_NAME_EXIST","用户名已经存在"));
         }
-        // 创建用户，需要生成文件夹，复制index 页面
-        String createFolderPath = MessageFormat.format(default_url_user, albumUser.getName());
-        File fileUIS = new File(createFolderPath);
-        if(!fileUIS.exists()){// 如果不存在文件夹创建文件夹,每天第一次上传文件会创建yyyyMMdd的文件夹
-            log.info("创建用户文件夹路径=[{}]", createFolderPath);
-            fileUIS.mkdirs();// 创建用户文件夹
+//         //创建用户，需要生成文件夹，复制index 页面
+//        String createFolderPath = MessageFormat.format(default_url_user, albumUser.getName());
+//        File fileUIS = new File(createFolderPath);
+//        if(!fileUIS.exists()){
+//            log.info("创建用户文件夹路径=[{}]", createFolderPath);
+//            fileUIS.setWritable(true, false);
+//            fileUIS.mkdirs();// 创建用户文件夹
 
-            String imagesFolderPath = MessageFormat.format(default_url_images, albumUser.getName());
-            log.info("创建images文件夹路径=[{}]", imagesFolderPath);
-            new File(imagesFolderPath).mkdir();// images文件夹
-
-            String mFolderPath = MessageFormat.format(default_url_m, albumUser.getName());
-            log.info("创建m文件夹路径=[{}]", mFolderPath);
-            new File(mFolderPath).mkdir();// m文件夹
+//            String imagesFolderPath = MessageFormat.format(default_url_images, albumUser.getName());
+//            log.info("创建images文件夹路径=[{}]", imagesFolderPath);
+//            fileUIS = new File(imagesFolderPath);
+//            fileUIS.mkdirs();// images文件夹
+//
+//            String mFolderPath = MessageFormat.format(default_url_m, albumUser.getName());
+//            log.info("创建m文件夹路径=[{}]", mFolderPath);
+//            new File(mFolderPath).mkdir();// m文件夹
 
             // 复制demo 的index.html页面
             String fromIndexUrl = MessageFormat.format(default_url_indexHtml, "demo");
@@ -90,7 +92,7 @@ public class AlbumResource {
             fromIndexUrl = MessageFormat.format(default_url_indexHtml, "demo/m");
             toIndexUrl = MessageFormat.format(default_url_indexHtml, albumUser.getName() + "/m");
             this.fileCopy(fromIndexUrl, toIndexUrl);
-        }
+//        }
         albumUser.setPassword(albumUser.getPassword());// TODO 加密
         albumUserDao.insert(albumUser);
 
@@ -196,6 +198,16 @@ public class AlbumResource {
 
     private void fileCopy(String fromUrl, String toUrl) throws Exception {
         log.info("copy file fromUrl=[{}],toUrl=[{}]", fromUrl, toUrl);
+
+        // 判断文件目录是否存在，不存在则创建
+        String foloder = StringUtils.substringBeforeLast(toUrl,"/");
+        File fileUIS = new File(foloder);
+        if(!fileUIS.exists()) {//
+            log.info("创建文件夹路径=[{}]", foloder);
+            fileUIS.setWritable(true, false);
+            fileUIS.mkdirs();// 创建用户文件夹
+        }
+
         FileInputStream fis = null;
         FileOutputStream fos = null;
         try {
