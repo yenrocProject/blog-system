@@ -185,6 +185,8 @@ public class AlbumResource {
         MultipartFile file = multipartHttpServletRequest.getFile("file");
         File fullPathFile = new File(fileFullPath);
         try {
+            this.checkUrl(fileFullPath);
+
             file.transferTo(fullPathFile); //保存文件
         } catch (IOException | IllegalStateException ex) {
             log.error("文件=[{}] 上传失败，异常信息=[{}]", file.getOriginalFilename(), ex);
@@ -200,13 +202,7 @@ public class AlbumResource {
         log.info("copy file fromUrl=[{}],toUrl=[{}]", fromUrl, toUrl);
 
         // 判断文件目录是否存在，不存在则创建
-        String foloder = StringUtils.substringBeforeLast(toUrl,"/");
-        File fileUIS = new File(foloder);
-        if(!fileUIS.exists()) {//
-            log.info("创建文件夹路径=[{}]", foloder);
-            fileUIS.setWritable(true, false);
-            fileUIS.mkdirs();// 创建用户文件夹
-        }
+        this.checkUrl(toUrl);
 
         FileInputStream fis = null;
         FileOutputStream fos = null;
@@ -223,6 +219,16 @@ public class AlbumResource {
         } finally {
             fis.close();//释放资源
             fos.close();//释放资源
+        }
+    }
+
+    private void checkUrl(String url){
+        String foloder = StringUtils.substringBeforeLast(url,"/");
+        File fileUIS = new File(foloder);
+        if(!fileUIS.exists()) {//
+            log.info("创建文件夹路径=[{}]", foloder);
+            fileUIS.setWritable(true, false);
+            fileUIS.mkdirs();// 创建用户文件夹
         }
     }
 
