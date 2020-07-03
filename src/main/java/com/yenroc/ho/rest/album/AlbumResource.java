@@ -54,7 +54,7 @@ public class AlbumResource {
     private final String default_url_images = default_url + "/{0}/images";
     private final String default_url_m = default_url + "/{0}/m";
     private final String default_url_indexHtml = default_url + "/{0}/index.html";
-    private final String default_url_mouldImg = default_url + "/{0}/images/mould{1}";
+    private final String default_url_mouldImg = default_url + "/{0}/images/{1}";
 
     @PostMapping("/albumUser/create")
     @ApiOperation(value="创建相册用户", notes="创建相册用户")
@@ -119,22 +119,22 @@ public class AlbumResource {
         new File(imagesFolderPath).mkdir();
 
 
-        // 创建相册页面的html（1.html）
-        String fromIndexUrl = MessageFormat.format(default_url_user, "demo")+"/" + album.getAlbumTemplateId() +".html" ;
-        String toIndexUrl = MessageFormat.format(default_url_user, albumUser.getName())+"/" + album.getAlbumTemplateId() +".html" ;
+        // 创建相册页面的html（_1.html）
+        String fromIndexUrl = MessageFormat.format(default_url_user, "demo")+"/_" + album.getAlbumTemplateId() +".html" ;
+        String toIndexUrl = MessageFormat.format(default_url_user, albumUser.getName())+"/_" + album.getAlbumTemplateId() +".html" ;
         fileCopy(fromIndexUrl, toIndexUrl);
-        // 创建相册页面的html（mould.html）
-        fromIndexUrl = MessageFormat.format(default_url_user, "demo")+"/mould" + album.getAlbumTemplateId() +".html" ;
-        toIndexUrl = MessageFormat.format(default_url_user, albumUser.getName())+"/mould" + album.getAlbumTemplateId() +".html" ;
+        // 创建相册页面的html（1.html）
+        fromIndexUrl = MessageFormat.format(default_url_user, "demo")+"/" + album.getAlbumTemplateId() +".html" ;
+        toIndexUrl = MessageFormat.format(default_url_user, albumUser.getName())+"/" + album.getAlbumTemplateId() +".html" ;
         fileCopy(fromIndexUrl, toIndexUrl);
 
-        // m 的创建相册页面的html（1.html）
-        fromIndexUrl = MessageFormat.format(default_url_user, "demo")+"/m/" + album.getAlbumTemplateId() +".html" ;
-        toIndexUrl = MessageFormat.format(default_url_user, albumUser.getName())+"/m/" + album.getAlbumTemplateId() +".html" ;
+        // m 的创建相册页面的html（_1.html）
+        fromIndexUrl = MessageFormat.format(default_url_user, "demo")+"/m/_" + album.getAlbumTemplateId() +".html" ;
+        toIndexUrl = MessageFormat.format(default_url_user, albumUser.getName())+"/m/_" + album.getAlbumTemplateId() +".html" ;
         fileCopy(fromIndexUrl, toIndexUrl);
         // 创建相册页面的html（mould.html）
-        fromIndexUrl = MessageFormat.format(default_url_user, "demo")+"/m/mould" + album.getAlbumTemplateId() +".html" ;
-        toIndexUrl = MessageFormat.format(default_url_user, albumUser.getName())+"/m/mould" + album.getAlbumTemplateId() +".html" ;
+        fromIndexUrl = MessageFormat.format(default_url_user, "demo")+"/m/" + album.getAlbumTemplateId() +".html" ;
+        toIndexUrl = MessageFormat.format(default_url_user, albumUser.getName())+"/m/" + album.getAlbumTemplateId() +".html" ;
         fileCopy(fromIndexUrl, toIndexUrl);
 
 
@@ -171,7 +171,7 @@ public class AlbumResource {
         AlbumTemplatePhotoConfig photoConfig = albumTemplatePhotoConfigDao.selectByPrimaryKey(albumPhoto.getTemplatePhotoId());
 
         // 获取文件上传路径
-        String fileFullPath = MessageFormat.format(default_url_images, albumUser.getName()) + "/mould" + album.getAlbumTemplateId() + "/" +  photoConfig.getAlpumPhotoName() + ".jpg";
+        String fileFullPath = MessageFormat.format(default_url_images, albumUser.getName()) + "/" + album.getAlbumTemplateId() + "/" +  photoConfig.getAlpumPhotoName() + ".jpg";
 
         MultipartHttpServletRequest multipartHttpServletRequest = null;
         try {
