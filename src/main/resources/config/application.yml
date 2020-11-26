@@ -5,6 +5,10 @@ spring:
         name: springboot-project-demo
     redis:
         host: 134.175.91.16
+    servlet:
+        multipart:
+            max-file-size: 1024MB
+            max-request-size: 4096MB
     
 jhipster:
     async:

@@ -1,6 +1,7 @@
 package com.yenroc.ho.mapper.entity;
 
 import com.yenroc.ho.blogic.sqlDto.SqlInputBaseDto;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -20,8 +21,12 @@ public class FileInfo extends SqlInputBaseDto implements Serializable {
     private String fileName;
 
     // 文件上传路径
-    @Column(name = "fileFullName")
-    private String fileFullName;
+    @Column(name = "fileFullPath")
+    private String fileFullPath;
+
+    // 文件缩略图地址
+    @Column(name = "thumbFullPath")
+    private String thumbFullPath;
 
     // 文件原始名称
     @Column(name = "fileOriginalName")
@@ -47,12 +52,12 @@ public class FileInfo extends SqlInputBaseDto implements Serializable {
         this.fileName = fileName;
     }
 
-    public String getFileFullName() {
-        return fileFullName;
+    public String getFileFullPath() {
+        return fileFullPath;
     }
 
-    public void setFileFullName(String fileFullName) {
-        this.fileFullName = fileFullName;
+    public void setFileFullPath(String fileFullPath) {
+        this.fileFullPath = fileFullPath;
     }
 
     public String getFileOriginalName() {
@@ -71,4 +76,11 @@ public class FileInfo extends SqlInputBaseDto implements Serializable {
         this.fileSize = fileSize;
     }
 
+    public String getThumbFullPath() {
+        return thumbFullPath;
+    }
+
+    public void setThumbFullPath(String thumbFullPath) {
+        this.thumbFullPath = thumbFullPath;
+    }
 }

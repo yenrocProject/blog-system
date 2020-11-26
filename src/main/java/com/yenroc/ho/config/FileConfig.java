@@ -1,5 +1,6 @@
 package com.yenroc.ho.config;
 
+import com.yenroc.ho.blogic.java.fileService.UploadTypeEnum;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
@@ -27,5 +28,12 @@ public class FileConfig implements Serializable {
      * 可预览的文本型类型
      */
     private String previewTextType;
+
+    /**
+     * 上传类型
+     */
+    private UploadTypeEnum uploadType;
+
+
 
 }

@@ -84,7 +84,7 @@ public class FIleService {
         FileInfo fileInfo = new FileInfo();
         fileInfo.setId(fileId);// 文件Id
         fileInfo.setFileName(newFileName); // 文件名
-        fileInfo.setFileFullName(fileFullName);// 文件全路径
+        fileInfo.setFileFullPath(fileFullName);// 文件全路径
         fileInfo.setFileOriginalName(fileOriginalName);
         fileInfo.setFileSize(file.getSize());
         int insertResult = fileInfoDao.insert(fileInfo);
@@ -110,7 +110,7 @@ public class FIleService {
             throw new BizLogicException(new SystemMessage("FILE_NOT_PREVIEW","该文件类型类型暂不支持预览，请下载后查看！"));
         }
 
-        String fullName = getFileInfo(fileName).getFileFullName();
+        String fullName = getFileInfo(fileName).getFileFullPath();
         File file = new File(fullName);
         return file;
     }
