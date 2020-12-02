@@ -34,6 +34,11 @@ public class FileConfig implements Serializable {
      */
     private UploadTypeEnum uploadType;
 
+    /**
+     * 文件预览地址
+     */
+    private String filePreviewUrl;
+
 
 
 }
