@@ -1,5 +1,8 @@
 server:
     port: 8089
+    ssl:
+        key-store: classpath:yenroc.pfx
+        key-store-password: xU6Etdj7
 spring:
     application:
         name: springboot-project-demo
