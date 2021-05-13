@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 import java.io.Serializable;
 
-@Table(name="file")
+@Table(name="file2")
 public class FileInfo extends SqlInputBaseDto implements Serializable {
 
     private static final long serialVersionUID = -7241063697538687240L;
