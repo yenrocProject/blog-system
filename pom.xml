@@ -1,13 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.yenroc.ho</groupId>
-	<artifactId>blog-system</artifactId>
-	<version>0.1</version>
-	<name>blog-system</name>
-	<packaging>jar</packaging>
-	<description>一个基于springboot的框架</description>
-
-	<parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.yenroc.ho</groupId>
+  <artifactId>blog-system</artifactId>
+  <version>0.1</version>
+  <name>blog-system</name>
+  <description>一个基于springboot的框架</description>
+  
+  <parent>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-parent</artifactId>
 	    <version>2.1.0.RELEASE</version>
@@ -167,6 +166,27 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 			<version>2.3.10.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.14</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aspose</groupId>
+			<artifactId>aspose-words</artifactId>
+			<version>15.11.0</version>
+			<classifier>jdk16</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.aspose</groupId>
+			<artifactId>aspose-pdf</artifactId>
+			<version>11.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.aspose</groupId>
+			<artifactId>aspose-cells</artifactId>
+			<version>9.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -175,38 +195,36 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<!--<plugin>-->
-				<!--<groupId>org.mybatis.generator</groupId>-->
-				<!--<artifactId>mybatis-generator-maven-plugin</artifactId>-->
-				<!--<version>1.3.2</version>-->
-				<!--<configuration>-->
-					<!--<configurationFile>src/main/resources/generatorConfig.xml</configurationFile>-->
-					<!--<verbose>true</verbose>-->
-					<!--<overwrite>true</overwrite>-->
-				<!--</configuration>-->
-				<!--<executions>-->
-					<!--<execution>-->
-						<!--<id>Generate MyBatis Artifacts</id>-->
-						<!--&lt;!&ndash;加入下行打包时不会执行 generatorConfig.xml &ndash;&gt;-->
-						<!--<phase>deploy</phase>-->
-						<!--<goals>-->
-							<!--<goal>generate</goal>-->
-						<!--</goals>-->
-					<!--</execution>-->
-				<!--</executions>-->
-				<!--<dependencies>-->
-					<!--<dependency>-->
-						<!--<groupId>org.mybatis.generator</groupId>-->
-						<!--<artifactId>mybatis-generator-core</artifactId>-->
-						<!--<version>1.3.2</version>-->
-					<!--</dependency>-->
-					<!--<dependency>-->
-						<!--<groupId>tk.mybatis</groupId>-->
-						<!--<artifactId>mapper</artifactId>-->
-						<!--<version>3.5.0</version>-->
-					<!--</dependency>-->
-				<!--</dependencies>-->
-			<!--</plugin>-->
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.3.2</version>
+				<configuration>
+					<configurationFile>src/main/resources/generatorConfig.xml</configurationFile>
+					<verbose>true</verbose>
+					<overwrite>true</overwrite>
+				</configuration>
+				<executions>
+					<execution>
+						<id>Generate MyBatis Artifacts</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.mybatis.generator</groupId>
+						<artifactId>mybatis-generator-core</artifactId>
+						<version>1.3.2</version>
+					</dependency>
+					<dependency>
+						<groupId>tk.mybatis</groupId>
+						<artifactId>mapper</artifactId>
+						<version>3.5.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
 </project>

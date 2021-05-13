@@ -1,36 +1,39 @@
 package com.yenroc.ho.mapper.entity;
 
+
+import com.yenroc.ho.blogic.sqlDto.SqlInputBaseDto;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
 @Table(name="album_template_photo_config")
-public class AlbumTemplatePhotoConfig implements Serializable {
+public class AlbumTemplatePhotoConfig extends SqlInputBaseDto implements Serializable {
 
     private static final long serialVersionUID = -7241063697538687240L;
 
-    @Column(name = "id")
     @Id
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "album_template_id")
     private Integer albumTemplateId;
 
-    @Column(name = "alpum_photo")
-    private String alpumPhoto;
+    @Column(name = "photo_config_name")
+    private String photoConfigName;
 
-    @Column(name = "alpum_photo_name")
-    private String alpumPhotoName;
+    @Column(name = "photo_desc")
+    private Integer photoDesc;
 
-    @Column(name = "alpum_photo_desc")
-    private String alpumPhotoDesc;
+    @Column(name = "template_photo_size")
+    private Integer templatePhotoSize;
 
-    @Column(name = "alpum_photo_width")
-    private Integer alpumPhotoWidth;
+    @Column(name = "photo_width")
+    private Integer photoWidth;
 
-    @Column(name = "alpum_photo_height")
-    private Integer alpumPhotoHeight;
+    @Column(name = "photo_height")
+    private Integer photoHeight;
 
     public Integer getId() {
         return id;
@@ -48,43 +51,43 @@ public class AlbumTemplatePhotoConfig implements Serializable {
         this.albumTemplateId = albumTemplateId;
     }
 
-    public String getAlpumPhoto() {
-        return alpumPhoto;
+    public String getPhotoConfigName() {
+        return photoConfigName;
     }
 
-    public void setAlpumPhoto(String alpumPhoto) {
-        this.alpumPhoto = alpumPhoto;
+    public void setPhotoConfigName(String photoConfigName) {
+        this.photoConfigName = photoConfigName;
     }
 
-    public String getAlpumPhotoName() {
-        return alpumPhotoName;
+    public Integer getPhotoDesc() {
+        return photoDesc;
     }
 
-    public void setAlpumPhotoName(String alpumPhotoName) {
-        this.alpumPhotoName = alpumPhotoName;
+    public void setPhotoDesc(Integer photoDesc) {
+        this.photoDesc = photoDesc;
     }
 
-    public String getAlpumPhotoDesc() {
-        return alpumPhotoDesc;
+    public Integer getTemplatePhotoSize() {
+        return templatePhotoSize;
     }
 
-    public void setAlpumPhotoDesc(String alpumPhotoDesc) {
-        this.alpumPhotoDesc = alpumPhotoDesc;
+    public void setTemplatePhotoSize(Integer templatePhotoSize) {
+        this.templatePhotoSize = templatePhotoSize;
     }
 
-    public Integer getAlpumPhotoWidth() {
-        return alpumPhotoWidth;
+    public Integer getPhotoWidth() {
+        return photoWidth;
     }
 
-    public void setAlpumPhotoWidth(Integer alpumPhotoWidth) {
-        this.alpumPhotoWidth = alpumPhotoWidth;
+    public void setPhotoWidth(Integer photoWidth) {
+        this.photoWidth = photoWidth;
     }
 
-    public Integer getAlpumPhotoHeight() {
-        return alpumPhotoHeight;
+    public Integer getPhotoHeight() {
+        return photoHeight;
     }
 
-    public void setAlpumPhotoHeight(Integer alpumPhotoHeight) {
-        this.alpumPhotoHeight = alpumPhotoHeight;
+    public void setPhotoHeight(Integer photoHeight) {
+        this.photoHeight = photoHeight;
     }
 }

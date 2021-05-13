@@ -16,7 +16,8 @@
 		SELECT
 			id,
 			fileName,
-			fileFullName,
+			fileFullPath,
+			thumbFullPath,
 			fileOriginalName,
 			fileSize,
 			created_by AS createdBy,

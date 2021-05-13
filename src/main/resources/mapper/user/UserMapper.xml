@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  描述:[demo][demo]查询方法的sql文件
+ @version: 0_1
+ @author: AutoGenerate
+ @date: 2019年9月20日
+ -->
+<!--指定dao -->
+<mapper namespace="com.yenroc.ho.mapper.UserDao">
+	<!--查询-->
+	<select id="finByUserName"
+			useCache="true"
+			parameterType="java.lang.System"
+			resultType="com.yenroc.ho.mapper.entity.User">
+		SELECT
+			id,
+			user_name AS userName,
+			password AS password,
+			nick_name AS nickName,
+			created_by AS createdBy,
+			created_date AS createdDate,
+			last_modified_by AS lastModifiedBy,
+			last_modified_date AS lastModifiedDate,
+			is_del AS isDel
+		FROM
+			user
+		<where>
+			(IS_DEL = 0 OR IS_DEL IS NULL)
+			and user_name = #{userName, jdbcType=VARCHAR}
+		</where>
+	</select>
+
+</mapper>

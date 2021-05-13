@@ -31,18 +31,20 @@
 					url: "/api/albumUser/createAndLogin" ,
 					cache:false,
 					dataType: "json",
-					data: JSON.stringify({name: userName, password:pd}),
+					data: JSON.stringify({userName: userName, password:pd}),
 					headers: { "Content-Type": "application/json;charset=utf-8" },
 					success: function(data){
 						if (data.responseCode == 200) {
 							storage["userName"]=userName;
+							window.location.href = userName+"/index.html";
 						} else {
 							alert("用户存在,输入的口令不正确,请刷新页面!");
 						}
 					}
 				})
+			} else {
+				window.location.href = userName+"/index.html";
 			}
-			window.location.href = userName+"/index.html";
 		}
 	};
 </script>
