@@ -81,10 +81,11 @@ public class FileUploadServiceImpl extends AbstractFileUploadService implements 
     @Override
     protected List<CommonUploadResultVO> fileSystemUpload(List<CommonUploadFileVO> uploadFileVOS) throws Exception {
         log.info("进行fileSystemUpload文件上传");
+        String folder = DateUtil.toString(DateUtil.getCurDate(),"yyyyMMdd");
         String fullFolderPath = MessageFormat.format("{0}{1}{2}",
                 fileConfig.getUploadPath(),
                 File.separator,
-                DateUtil.toString(DateUtil.getCurDate(),"yyyyMMdd"));
+                folder);
         log.info("上传文件的路径=[{}]", fullFolderPath);
         File f1 = new File(fullFolderPath);
         if (!f1.exists()) {
@@ -124,8 +125,8 @@ public class FileUploadServiceImpl extends AbstractFileUploadService implements 
                 uploadResultVO.setFileName(uploadFileVO.getFileName());
                 uploadResultVO.setFileSize(uploadFileVO.getFileSize());
                 uploadResultVO.setFileOriginalName(uploadFileVO.getFileOriginalName());
-                uploadResultVO.setFileFullPath(fullFolderPath + File.separator + uploadFileVO.getFileName());
-                uploadResultVO.setThumbFullPath(fullFolderPath + File.separator + thumbFileName);
+                uploadResultVO.setFileFullPath(File.separator + folder + File.separator + uploadFileVO.getFileName());
+                uploadResultVO.setThumbFullPath(File.separator + folder + File.separator + thumbFileName);
                 result.add(uploadResultVO);
             } catch (Exception ex) {
                 log.info("文件上传异常=", ex);

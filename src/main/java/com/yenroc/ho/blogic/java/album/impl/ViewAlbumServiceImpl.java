@@ -4,6 +4,7 @@ import com.yenroc.ho.blogic.consts.AlbumConsts;
 import com.yenroc.ho.blogic.java.album.ViewAlbumService;
 import com.yenroc.ho.blogic.restDto.album.viewAlbum.AlbumPhotoInfoVo;
 import com.yenroc.ho.blogic.sqlDto.albumPhotoInstance.AlbumPhotoInfo;
+import com.yenroc.ho.config.BlogGlobalConfig;
 import com.yenroc.ho.mapper.AlbumInstanceDao;
 import com.yenroc.ho.mapper.AlbumPhotoInstanceDao;
 import com.yenroc.ho.mapper.AlbumTemplateDao;
@@ -40,6 +41,9 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
 
     @Autowired
     private AlbumPhotoInstanceDao albumPhotoInstanceDao;
+
+    @Autowired
+    private BlogGlobalConfig blogGlobalConfig;
 
     /**
      * 预览模板相册
@@ -130,12 +134,14 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
             for (AlbumPhotoInfo albumPhotoInfo : albumPhotoInfos) {
                 AlbumPhotoInfoVo albumPhotoInfoVo = new AlbumPhotoInfoVo();
                 albumPhotoInfoVo.setAlbumPhotoInstanceId(albumPhotoInfo.getAlbumPhotoInstanceId());
-                albumPhotoInfoVo.setFileName(albumPhotoInfo.getFileName());
-                albumPhotoInfoVo.setPhotoUrl(albumPhotoInfo.getPhotoUrl());
+                // 自带提供的预览
+                albumPhotoInfoVo.setFileName("/api/file/preview/" + albumPhotoInfo.getFileName());
+                // 通过文件服务器提供的预览,可使用nginx
+                albumPhotoInfoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
             }
         }
+        log.info("查看相册,图片信息=[{}]", albumPhotoInfoVos);
         mv.addObject("imageInfos",albumPhotoInfoVos);
-
 
         return mv;
     }

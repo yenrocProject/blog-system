@@ -18,4 +18,7 @@ public class BlogGlobalConfig implements Serializable {
      */
     private String applicationName;
 
+    private String photoViewUrl;
+
+
 }
