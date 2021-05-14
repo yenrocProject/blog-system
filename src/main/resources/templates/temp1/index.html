@@ -43,24 +43,24 @@
         .m-main{width:1200px; height: 60px;margin: 0 auto}
     </style>
     <script th:inline="javascript">
-        window.images = [[${images}]];
+        window.imageInfos = [[${imageInfos}]];
         window.userName = [[${userName}]];
     </script>
     <script>
         (function () {
             var images = [];
-            images.push(window.images[0]);
-            images.push(window.images[1]);
-            images.push(window.images[2]);
-            images.push(window.images[3]);
-            images.push(window.images[4]);
-            images.push(window.images[5]);
-            images.push(window.images[6]);
-            images.push(window.images[7]);
-            images.push(window.images[8]);
-            images.push(window.images[9]);
-            images.push(window.images[10]);
-            images.push(window.images[11]);
+            images.push(window.imageInfos[0].photoUrl);
+            images.push(window.imageInfos[1].photoUrl);
+            images.push(window.imageInfos[2].photoUrl);
+            images.push(window.imageInfos[3].photoUrl);
+            images.push(window.imageInfos[4].photoUrl);
+            images.push(window.imageInfos[5].photoUrl);
+            images.push(window.imageInfos[6].photoUrl);
+            images.push(window.imageInfos[7].photoUrl);
+            images.push(window.imageInfos[8].photoUrl);
+            images.push(window.imageInfos[9].photoUrl);
+            images.push(window.imageInfos[10].photoUrl);
+            images.push(window.imageInfos[11].photoUrl);
 
             // images.push('/temp1/images/1/1.jpg');
 			// images.push('/temp1/images/1/2.jpg');

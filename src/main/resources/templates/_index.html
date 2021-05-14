@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:method="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>I DIY Album</title>
+</head>
+<body>
+欢迎<span style="color:red"><span th:text="${userName}"/></span>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>模板名称</th>
+        <th>模板描述</th>
+        <th>操作</th>
+    </tr>
+    <tr th:each="album:${albums}"><!--循环userList,以person作为形参-->
+        <td th:text="${album.templateId}"></td>
+        <td th:text="${album.templateName}"></td>
+        <td th:text="${album.templateDesc}"></td>
+        <td>
+            <dd><a th:href="@{/preview/{templateId}.html(templateId=${album.templateId})}">预览</a></dd>
+
+            <dd><a
+                    th:href="@{/{userName}/{templateId}/{userAlbumId}.html?album_key={privateKey}(userName=${userName},templateId=${album.templateId},userAlbumId=${album.userAlbumId},privateKey=${privateKey})}">查看</a></dd>
+
+        </td>
+    </tr>
+</table>
+</body>
+</html>

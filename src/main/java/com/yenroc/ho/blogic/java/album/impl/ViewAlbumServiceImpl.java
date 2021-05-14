@@ -22,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -58,7 +61,7 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
             mv.setViewName("404.html");
             return mv;
         }
-        ModelAndView mv = viewAlbumId(albumTemplate.getId());
+        ModelAndView mv = viewAlbumId(albumTemplate.getDefaultInstanceId());
         mv.addObject("userName", "defalut");
         return mv;
     }
@@ -123,12 +126,6 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
 
         List<AlbumPhotoInfo> albumPhotoInfos = albumPhotoInstanceDao.getPhotoInfoByAlbumId(albumInstance.getId());
 
-        // TODO 测试
-        mv.addObject("images",new String[]{"/temp1/images/1/1.jpg","/temp1/images/1/1.jpg","/temp1/images/1/1.jpg",
-                "/temp1/images/1/1.jpg","/temp1/images/1/1.jpg","/temp1/images/1/1.jpg","/temp1/images/1/1.jpg",
-                "/temp1/images/1/1.jpg","/temp1/images/1/1.jpg","/temp1/images/1/1.jpg","/temp1/images/1/1.jpg",
-                "/temp1/images/1/1.jpg"});
-
         List<AlbumPhotoInfoVo> albumPhotoInfoVos = new ArrayList<>();
         if (albumPhotoInfos.size() > 0) {
             for (AlbumPhotoInfo albumPhotoInfo : albumPhotoInfos) {
@@ -138,7 +135,16 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
                 albumPhotoInfoVo.setFileName("/api/file/preview/" + albumPhotoInfo.getFileName());
                 // 通过文件服务器提供的预览,可使用nginx
                 albumPhotoInfoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
+                albumPhotoInfoVos.add(albumPhotoInfoVo);
             }
+//            Collections.sort(albumPhotoInfoVos, new Comparator<AlbumPhotoInfoVo>() {
+//                @Override
+//                public int compare(AlbumPhotoInfoVo o1, AlbumPhotoInfoVo o2) {
+//                    return o1.getAlbumPhotoInstanceId() - o2.getAlbumPhotoInstanceId();
+//                }
+//            });
+            albumPhotoInfoVos = albumPhotoInfoVos.stream().sorted(Comparator.comparing(AlbumPhotoInfoVo::getAlbumPhotoInstanceId)).collect(Collectors.toList());
+            ;
         }
         log.info("查看相册,图片信息=[{}]", albumPhotoInfoVos);
         mv.addObject("imageInfos",albumPhotoInfoVos);

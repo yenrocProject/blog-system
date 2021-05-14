@@ -32,6 +32,9 @@ public class AlbumTemplate extends SqlInputBaseDto implements Serializable {
     @Column(name = "template_html_path")
     private String templateHtmlPath;
 
+    @Column(name = "template_style_css")
+    private String templateStyleCss;
+
     public Integer getId() {
         return id;
     }
@@ -78,5 +81,13 @@ public class AlbumTemplate extends SqlInputBaseDto implements Serializable {
 
     public void setTemplateHtmlPath(String templateHtmlPath) {
         this.templateHtmlPath = templateHtmlPath;
+    }
+
+    public String getTemplateStyleCss() {
+        return templateStyleCss;
+    }
+
+    public void setTemplateStyleCss(String templateStyleCss) {
+        this.templateStyleCss = templateStyleCss;
     }
 }

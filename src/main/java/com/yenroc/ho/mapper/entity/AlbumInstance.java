@@ -33,6 +33,12 @@ public class AlbumInstance extends SqlInputBaseDto implements Serializable {
     @Column(name = "private_key")
     private String privateKey;
 
+    @Column(name = "album_style_css")
+    private String albumStyleCss;
+
+    @Column(name = "default_view_photo")
+    private String defaultViewPhoto;
+
     public Integer getId() {
         return id;
     }
@@ -87,5 +93,21 @@ public class AlbumInstance extends SqlInputBaseDto implements Serializable {
 
     public void setPrivateKey(String privateKey) {
         this.privateKey = privateKey;
+    }
+
+    public String getAlbumStyleCss() {
+        return albumStyleCss;
+    }
+
+    public void setAlbumStyleCss(String albumStyleCss) {
+        this.albumStyleCss = albumStyleCss;
+    }
+
+    public String getDefaultViewPhoto() {
+        return defaultViewPhoto;
+    }
+
+    public void setDefaultViewPhoto(String defaultViewPhoto) {
+        this.defaultViewPhoto = defaultViewPhoto;
     }
 }

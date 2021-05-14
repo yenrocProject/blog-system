@@ -1,7 +1,11 @@
 package com.yenroc.ho.blogic.java.album.impl;
 
+import com.yenroc.ho.blogic.consts.AlbumConsts;
 import com.yenroc.ho.blogic.java.album.UserAlbumInfoService;
-import com.yenroc.ho.blogic.restDto.album.userAlbumInfo.AlbumVo;
+import com.yenroc.ho.blogic.restDto.album.userAlbumInfo.AlbumTemplateVo;
+import com.yenroc.ho.blogic.restDto.album.userAlbumInfo.PublicAlbumVo;
+import com.yenroc.ho.blogic.restDto.album.userAlbumInfo.UserAlbumVo;
+import com.yenroc.ho.config.BlogGlobalConfig;
 import com.yenroc.ho.mapper.AlbumInstanceDao;
 import com.yenroc.ho.mapper.AlbumTemplateDao;
 import com.yenroc.ho.mapper.UserDao;
@@ -34,8 +38,12 @@ public class UserAlbumInfoServiceImpl implements UserAlbumInfoService {
     @Autowired
     private AlbumInstanceDao albumInstanceDao;
 
+    @Autowired
+    private BlogGlobalConfig blogGlobalConfig;
+
     public ModelAndView showAlbums(String userName) {
         ModelAndView mv = new ModelAndView();
+        mv.addObject("userName", userName);
 
         List<User> users = userDao.finByUserName(userName);
         if (users.size() == 0) {
@@ -45,32 +53,76 @@ public class UserAlbumInfoServiceImpl implements UserAlbumInfoService {
         }
         User user = users.get(0);
 
+        // 所有的模板
         List<AlbumTemplate> albumTemplates = albumTemplateDao.selectAll();
-        List<AlbumInstance> albumInstances = albumInstanceDao.finByUserId(user.getId());
-
-        List<AlbumVo> albumVos = new ArrayList<>();
+        List<AlbumTemplateVo> albumTemplateVos = new ArrayList<>();
         if (albumTemplates.size() > 0) {
             for (AlbumTemplate albumTemplate : albumTemplates) {
-                AlbumVo albumVo = new AlbumVo();
-                albumVo.setTemplateId(albumTemplate.getId());
-                albumVo.setTemplateName(albumTemplate.getTemplateName());
-                albumVo.setTemplateDesc(albumTemplate.getTemplateDesc());
-                albumVo.setDefaultInstanceId(albumTemplate.getDefaultInstanceId());
-                albumVo.setTemplatePhotoSize(albumTemplate.getTemplatePhotoSize());
-                if (albumInstances.size() > 0) {
-                    for ( AlbumInstance albumInstance : albumInstances) {
-                        albumVo.setUserAlbumId(albumInstance.getId());
-                        albumVo.setAlbumName(albumInstance.getAlbumName());
-                        albumVo.setAlbumDesc(albumInstance.getAlbumDesc());
-                        albumVo.setPrivateKey(albumInstance.getPrivateKey());
-                    }
-                }
-                albumVos.add(albumVo);
+                AlbumTemplateVo albumTemplateVo = new AlbumTemplateVo();
+                albumTemplateVo.setTemplateId(albumTemplate.getId());
+                albumTemplateVo.setDefaultInstanceId(albumTemplate.getDefaultInstanceId());
+                albumTemplateVo.setTemplateName(albumTemplate.getTemplateName());
+                albumTemplateVo.setTemplateDesc(albumTemplate.getTemplateDesc());
+                albumTemplateVo.setTemplateStyleCss(albumTemplate.getTemplateStyleCss());
+                albumTemplateVos.add(albumTemplateVo);
             }
         }
-        log.info("获取albums=[{}]", albumVos);
-        mv.addObject("albums", albumVos);
-        mv.addObject("userName", userName);
+
+        // 用户的模板
+        List<AlbumInstance> userAlbumInstances = albumInstanceDao.finByUserId(user.getId());
+        List<UserAlbumVo> userAlbumVos = new ArrayList<>();
+        if (userAlbumInstances.size() > 0) {
+            for (AlbumInstance albumInstance : userAlbumInstances) {
+                UserAlbumVo userAlbumVo = new UserAlbumVo();
+                userAlbumVo.setTemplateId(albumInstance.getAlbumTemplateId());
+                userAlbumVo.setUserAlbumId(albumInstance.getId());
+                userAlbumVo.setAlbumName(albumInstance.getAlbumName());
+                userAlbumVo.setAlbumDesc(albumInstance.getAlbumDesc());
+                userAlbumVo.setPrivateKey(albumInstance.getPrivateKey());
+                userAlbumVo.setAlbumStyleCss(albumInstance.getAlbumStyleCss());
+                userAlbumVo.setDefaultViewPhoto(blogGlobalConfig.getPhotoViewUrl() + albumInstance.getDefaultViewPhoto());
+                userAlbumVos.add(userAlbumVo);
+            }
+        }
+
+        // 所用用户的实例
+        List<AlbumInstance> albumInstances = albumInstanceDao.selectAll();
+        List<PublicAlbumVo> publicAlbumVos = new ArrayList<>();
+        if (albumInstances.size() > 0) {
+            for (AlbumInstance albumInstance : albumInstances) {
+                if (AlbumConsts.ALBUM_VIEW_PRIVATE.equals(albumInstance.getPrivateView())) {
+                    continue;
+                }
+                boolean isDefault =false;
+                for (AlbumTemplateVo albumTemplateVo : albumTemplateVos) {
+                    if (albumTemplateVo.getDefaultInstanceId().equals(albumInstance.getId())) {
+//                        albumTemplateVo.setViewPhotoUrl(albumInstance.getDefaultViewPhoto());
+                        albumTemplateVo.setViewPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumInstance.getDefaultViewPhoto());
+
+                        isDefault = true;
+                        break;
+                    }
+                }
+                if (isDefault) {
+                    continue;
+                }
+
+                PublicAlbumVo publicAlbumVo = new PublicAlbumVo();
+                publicAlbumVo.setTemplateId(albumInstance.getAlbumTemplateId());
+                publicAlbumVo.setAlbumId(albumInstance.getId());
+                publicAlbumVo.setAlbumName(albumInstance.getAlbumName());
+                publicAlbumVo.setAlbumDesc(albumInstance.getAlbumDesc());
+                publicAlbumVo.setAlbumStyleCss(albumInstance.getAlbumStyleCss());
+                publicAlbumVo.setDefaultViewPhoto(blogGlobalConfig.getPhotoViewUrl() + albumInstance.getDefaultViewPhoto());
+                publicAlbumVos.add(publicAlbumVo);
+            }
+        }
+        log.info("获取模板信息=[{}]", albumTemplateVos);
+        mv.addObject("albumTemplates", albumTemplateVos);
+        log.info("获取用户=[{}]的相册信息=[{}]", userName, userAlbumVos);
+        mv.addObject("userAlbums", userAlbumVos);
+        log.info("获取最新最热的公众相册=[{}]", publicAlbumVos);
+        mv.addObject("publicAlbums", publicAlbumVos);
         mv.setViewName("index.html");
 
         return mv;

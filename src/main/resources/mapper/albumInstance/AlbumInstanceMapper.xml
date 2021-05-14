@@ -20,6 +20,8 @@
 			album_template_id AS albumTemplateId,
 			private_view AS privateView,
 			private_key AS privateKey,
+			album_style_css AS albumStyleCss,
+			default_view_photo AS defaultViewPhoto,
 			created_by AS createdBy,
 			created_date AS createdDate,
 			last_modified_by AS lastModifiedBy,

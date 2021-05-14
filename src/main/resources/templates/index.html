@@ -2,29 +2,166 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:method="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>I DIY Album</title>
+    <title>定制属于 <span> magic </span> 的个性相册</title>
+
+    <script src="/base/js/prefixfree.min.js"></script>
+    <script src="/base/js/modernizr.js"></script>
+    <script src='/base/js/jquery.min.js'></script>
+    <script src='/base/js/rbeix.js'></script>
+    <script src="/base/js/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="/base/css/normalize.css"/>
+    <link rel="stylesheet" type="text/css" href="/base/css/default.css">
+    <link rel="stylesheet" href="/base/styles/main.css"/>
+    <style>
+
+        html {
+            font-family: Lato;
+            font-weight: 200;
+            font-size: 1em;
+            text-align: center;
+            color: #ddd;
+            min-height: 100%;
+            background: #092756;
+            background: -moz-radial-gradient(0% 100%, ellipse cover, rgba(35, 24, 82, 0.22) 10%, rgba(138, 114, 76, 0) 40%), -moz-linear-gradient(top, rgba(57, 173, 219, 0.25) 0%, rgba(42, 60, 87, 0.4) 100%), -moz-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+            background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(35, 24, 82, 0.22) 10%, rgba(138, 114, 76, 0) 40%), -webkit-linear-gradient(top, rgba(57, 173, 219, 0.25) 0%, rgba(42, 60, 87, 0.4) 100%), -webkit-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+            background: -o-radial-gradient(0% 100%, ellipse cover, rgba(35, 24, 82, 0.22) 10%, rgba(138, 114, 76, 0) 40%), -o-linear-gradient(top, rgba(57, 173, 219, 0.25) 0%, rgba(42, 60, 87, 0.4) 100%), -o-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+            background: -ms-radial-gradient(0% 100%, ellipse cover, rgba(35, 24, 82, 0.22) 10%, rgba(138, 114, 76, 0) 40%), -ms-linear-gradient(top, rgba(57, 173, 219, 0.25) 0%, rgba(42, 60, 87, 0.4) 100%), -ms-linear-gradient(-45deg, #670d10 0%, #092756 100%);
+            background: -webkit-radial-gradient(0% 100%, ellipse cover, rgba(35, 24, 82, 0.22) 10%, rgba(138, 114, 76, 0) 40%), linear-gradient(to bottom, rgba(57, 173, 219, 0.25) 0%, rgba(42, 60, 87, 0.4) 100%), linear-gradient(135deg, #670d10 0%, #092756 100%);
+        }
+
+        html body {
+            padding: 50px;
+        }
+
+        h1 span, h2 span, h3 span {
+            font-family: Montez;
+            font-size: 1.9em;
+            font-weight: 300;
+            margin: 0 0.3em;
+            color: #ff0080;
+        }
+
+        h1 {
+            font-size: 2em;
+            width: 900px;
+            margin: 0 auto 1em;
+            text-shadow: 0 1px 1px black;
+        }
+
+        p {
+            padding: 5px 10px;
+            display: inline-block;
+            margin: 10px auto;
+        }
+
+        .sparkley {
+            color: rgba(55, 55, 55, 0.8);
+            border: none;
+            padding: 16px 36px;
+            font-weight: normal;
+            border-radius: 3px;
+            transition: all 0.25s ease;
+            box-shadow: 0 38px 32px -23px black;
+            margin: 0 1em 1em;
+            background-color: Transparent;
+
+        }
+        .sparkley:hover {
+            background: #2c3e50;
+            color: rgba(155, 155, 155, 0.5);
+            background-repeat:no-repeat;
+            background-color: Transparent;
+        }
+    </style>
+
 </head>
 <body>
-欢迎<span style="color:red"><span th:text="${userName}"/></span>
-<table>
-    <tr>
-        <th>ID</th>
-        <th>模板名称</th>
-        <th>模板描述</th>
-        <th>操作</th>
-    </tr>
-    <tr th:each="album:${albums}"><!--循环userList,以person作为形参-->
-        <td th:text="${album.templateId}"></td>
-        <td th:text="${album.templateName}"></td>
-        <td th:text="${album.templateDesc}"></td>
-        <td>
-            <dd><a th:href="@{/preview/{templateId}.html(templateId=${album.templateId})}">预览</a></dd>
+<h1>定制属于 <span> yenroc.Ho </span> 的个性相册!</h1>
 
-            <dd><a
-                    th:href="@{/{userName}/{templateId}/{userAlbumId}.html?album_key={privateKey}(userName=${userName},templateId=${album.templateId},userAlbumId=${album.userAlbumId},privateKey=${privateKey})}">查看</a></dd>
+<!--<h3 id="templateAlbum" class="section-heading">相册模板</h3>-->
 
-        </td>
-    </tr>
-</table>
+<h1 style="margin: 60px auto 30px;position:relative">相册模板</h1>
+<div class="bs-example">
+    <div class="row">
+        <div class="col-sm-3" th:each="albumTemplate:${albumTemplates}">
+            <!-- normal -->
+            <div th:class= "${albumTemplate.templateStyleCss}">
+                <a th:href="@{/preview/{templateId}.html(templateId=${albumTemplate.templateId})}">
+                    <div class="img"><img th:src="${albumTemplate.viewPhotoUrl}" alt="img"></div>
+                    <div class="info">
+                        <h3 th:text="${albumTemplate.templateName}"></h3>
+                        <p th:text="${albumTemplate.templateDesc}"></p>
+                    </div>
+                </a>
+                <!--                <button style="top:-50px;" class="sparkley">制作</button>-->
+            </div>
+            <!-- end normal -->
+        </div>
+    </div>
+</div>
+
+
+<h1 style="margin: 60px auto 30px;position:relative">我的相册</h1>
+<div class="bs-example">
+    <div class="row" th:each="userAlbum:${userAlbums}">
+        <div class="col-sm-4">
+            <!-- normal -->
+            <div th:class= "${userAlbum.albumStyleCss}">
+                <a th:href="@{/{userName}/{templateId}/{userAlbumId}.html?album_key={privateKey}(userName=${userName},templateId=${userAlbum.templateId},userAlbumId=${userAlbum.userAlbumId},privateKey=${userAlbum.privateKey})}">
+                    <div class="img"><img th:src="${userAlbum.defaultViewPhoto}" alt="img"></div>
+                    <div class="info">
+                        <h3 th:text="${userAlbum.albumName}"></h3>
+                        <p th:text="${userAlbum.albumDesc}"></p>
+                    </div>
+                </a>
+            </div><br/><br/>
+            <!-- end normal -->
+        </div>
+        <!-- end normal -->
+        <div class="col-sm-4">
+            <!-- normal -->
+            <div class="ih-item square effect6 from_left_and_right"><a href="#">
+                <div class="img"><img src="/base/images/assets/rect/2.jpg" alt="img"></div>
+                <div class="info">
+                    <h3>Heading here</h3>
+                    <p>Description goes here</p>
+                </div>
+            </a></div><br/><br/>
+            <!-- end normal -->
+        </div>
+    </div>
+</div>
+
+<h3 id="publicAlbum" class="section-heading">猜你喜欢</h3>
+<div class="bs-example">
+    <div class="row" th:each="publicAlbum:${publicAlbums}">
+        <div class="col-sm-4">
+            <!-- normal -->
+            <div th:class= "${publicAlbum.albumStyleCss}">
+                <a th:href="@{/{userName}/{templateId}/{userAlbumId}.html(userName=${userName},templateId=${publicAlbum.templateId},userAlbumId=${publicAlbum.albumId})}">
+                    <div class="img"><img th:src="${publicAlbum.defaultViewPhoto}" alt="img"></div>
+                    <div class="info">
+                        <h3 th:text="${publicAlbum.albumName}"></h3>
+                        <p th:text="${publicAlbum.albumDesc}"></p>
+                    </div>
+                </a>
+            </div><br/><br/>
+            <!-- end normal -->
+        </div>
+        <!-- end normal -->
+        <div class="col-sm-4">
+            <!-- normal -->
+            <div class="ih-item square effect6 from_left_and_right"><a href="#">
+                <div class="img"><img src="/base/images/assets/rect/2.jpg" alt="img"></div>
+                <div class="info">
+                    <h3>Heading here</h3>
+                    <p>Description goes here</p>
+                </div>
+            </a></div><br/><br/>
+            <!-- end normal -->
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

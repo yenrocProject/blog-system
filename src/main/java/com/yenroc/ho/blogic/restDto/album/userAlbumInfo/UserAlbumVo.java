@@ -2,10 +2,11 @@ package com.yenroc.ho.blogic.restDto.album.userAlbumInfo;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-
+/**
+ * 登录用户的相册
+ */
 @Data
-public class AlbumVo {
+public class UserAlbumVo {
 
     // 模板Id
     private Integer templateId;
@@ -33,5 +34,10 @@ public class AlbumVo {
 
     // 相册密钥key
     private String privateKey;
+
+    private String albumStyleCss;
+
+    private String defaultViewPhoto;
+
 
 }
