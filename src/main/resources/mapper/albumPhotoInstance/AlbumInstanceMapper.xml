@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  描述:[demo][demo]查询方法的sql文件
+ @version: 0_1
+ @author: AutoGenerate
+ @date: 2019年9月20日
+ -->
+<!--指定dao -->
+<mapper namespace="com.yenroc.ho.mapper.AlbumPhotoInstanceDao">
+	<!--查询-->
+	<select id="getPhotoInfoByAlbumId"
+			useCache="true"
+			parameterType="java.lang.Integer"
+			resultType="com.yenroc.ho.blogic.sqlDto.albumPhotoInstance.AlbumPhotoInfo">
+		SELECT
+			t1.id AS albumPhotoInstanceId,
+			t2.fileName AS fileName,
+			t2.fileFullPath AS photoUrl
+		FROM
+			album_photo_instance t1
+		LEFT JOIN file t2 ON t1.file_id = t2.id
+		WHERE
+		<where>
+			(IS_DEL = 0 OR IS_DEL IS NULL)
+			and album_instance_id = #{albumInstanceId}
+		</where>
+	</select>
+
+</mapper>

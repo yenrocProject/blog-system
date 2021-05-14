@@ -7,7 +7,6 @@ import com.yenroc.ho.common.exception.BizLogicException;
 import com.yenroc.ho.common.service.BizLogic;
 import com.yenroc.ho.mapper.UserDao;
 import com.yenroc.ho.mapper.entity.User;
-import com.yenroc.ho.rest.album.AlbumResource;
 import com.yenroc.ho.utils.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -38,7 +37,7 @@ public class UserCreateAndLoginBLogic implements BizLogic<UserCreateAndLoginReqt
         List<User> selectResult = userDao.finByUserName(param.getUserName());
         if (selectResult.size() > 0) {
             User sqlUser = selectResult.get(0);
-            if (!sqlUser.getPassword().equals(MD5Util.generate(param.getPassword()))) {
+            if (!sqlUser.getPassword().equals(MD5Util.MD5(param.getPassword()))) {
                 throw new BizLogicException(new SystemMessage("USER_PASSWOED_ERROR","用户名口令错误！"));
             } else {
                 log.info("用户=[{}]登录成功!", sqlUser.getUserName());
@@ -48,7 +47,7 @@ public class UserCreateAndLoginBLogic implements BizLogic<UserCreateAndLoginReqt
             User user = new User();
             user.setUserName(param.getUserName());
             user.setStatus(0);
-            user.setPassword(MD5Util.generate(param.getPassword()));
+            user.setPassword(MD5Util.MD5(param.getPassword()));
             int i = userDao.insert(user);
             log.info("用户=[{}]创建成功,返回i={}", user.getUserName(), i);
             result.setId(i);

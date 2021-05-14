@@ -25,7 +25,13 @@ public class AlbumInstance extends SqlInputBaseDto implements Serializable {
     private String albumName;
 
     @Column(name = "album_desc")
-    private String albumNesc;
+    private String albumDesc;
+
+    @Column(name = "private_view")
+    private Integer privateView;
+
+    @Column(name = "private_key")
+    private String privateKey;
 
     public Integer getId() {
         return id;
@@ -59,11 +65,27 @@ public class AlbumInstance extends SqlInputBaseDto implements Serializable {
         this.albumName = albumName;
     }
 
-    public String getAlbumNesc() {
-        return albumNesc;
+    public String getAlbumDesc() {
+        return albumDesc;
     }
 
-    public void setAlbumNesc(String albumNesc) {
-        this.albumNesc = albumNesc;
+    public void setAlbumDesc(String albumDesc) {
+        this.albumDesc = albumDesc;
+    }
+
+    public Integer getPrivateView() {
+        return privateView;
+    }
+
+    public void setPrivateView(Integer privateView) {
+        this.privateView = privateView;
+    }
+
+    public String getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
     }
 }

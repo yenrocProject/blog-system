@@ -13,15 +13,17 @@
         <th>模板描述</th>
         <th>操作</th>
     </tr>
-    <tr th:each="albumTemplate:${albumTemplates}"><!--循环userList,以person作为形参-->
-        <td th:text="${albumTemplate.id}"></td>
-        <td th:text="${albumTemplate.templateName}"></td>
-        <td th:text="${albumTemplate.templateDesc}"></td>
+    <tr th:each="album:${albums}"><!--循环userList,以person作为形参-->
+        <td th:text="${album.templateId}"></td>
+        <td th:text="${album.templateName}"></td>
+        <td th:text="${album.templateDesc}"></td>
         <td>
-            <a href="/aa/1/202192.html">预览</a>
-            编辑,
-            查看
-        </td>>
+            <dd><a th:href="@{/preview/{templateId}.html(templateId=${album.templateId})}">预览</a></dd>
+
+            <dd><a
+                    th:href="@{/{userName}/{templateId}/{userAlbumId}.html?album_key={privateKey}(userName=${userName},templateId=${album.templateId},userAlbumId=${album.userAlbumId},privateKey=${privateKey})}">查看</a></dd>
+
+        </td>
     </tr>
 </table>
 </body>

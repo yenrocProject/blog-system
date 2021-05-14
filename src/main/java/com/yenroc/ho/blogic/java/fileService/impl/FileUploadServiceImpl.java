@@ -124,8 +124,8 @@ public class FileUploadServiceImpl extends AbstractFileUploadService implements 
                 uploadResultVO.setFileName(uploadFileVO.getFileName());
                 uploadResultVO.setFileSize(uploadFileVO.getFileSize());
                 uploadResultVO.setFileOriginalName(uploadFileVO.getFileOriginalName());
-                uploadResultVO.setFileFullPath(fullFolderPath + uploadFileVO.getFileName());
-                uploadResultVO.setThumbFullPath(fullFolderPath + thumbFileName);
+                uploadResultVO.setFileFullPath(fullFolderPath + File.separator + uploadFileVO.getFileName());
+                uploadResultVO.setThumbFullPath(fullFolderPath + File.separator + thumbFileName);
                 result.add(uploadResultVO);
             } catch (Exception ex) {
                 log.info("文件上传异常=", ex);

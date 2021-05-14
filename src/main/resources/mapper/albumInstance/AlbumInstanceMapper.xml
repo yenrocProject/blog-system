@@ -7,27 +7,29 @@
  @date: 2019年9月20日
  -->
 <!--指定dao -->
-<mapper namespace="com.yenroc.ho.mapper.UserDao">
+<mapper namespace="com.yenroc.ho.mapper.AlbumInstanceDao">
 	<!--查询-->
-	<select id="finByUserName"
+	<select id="finByUserId"
 			useCache="true"
-			parameterType="java.lang.String"
-			resultType="com.yenroc.ho.mapper.entity.User">
+			parameterType="java.lang.Integer"
+			resultType="com.yenroc.ho.mapper.entity.AlbumInstance">
 		SELECT
-			id,
-			user_name AS userName,
-			password AS password,
-			nick_name AS nickName,
+			id AS id,
+			album_name AS albumName,
+			album_desc AS albumDesc,
+			album_template_id AS albumTemplateId,
+			private_view AS privateView,
+			private_key AS privateKey,
 			created_by AS createdBy,
 			created_date AS createdDate,
 			last_modified_by AS lastModifiedBy,
 			last_modified_date AS lastModifiedDate,
 			is_del AS isDel
 		FROM
-			user
+			album_instance
 		<where>
 			(IS_DEL = 0 OR IS_DEL IS NULL)
-			and user_name = #{userName, jdbcType=VARCHAR}
+			and user_id = #{userId, jdbcType=VARCHAR}
 		</where>
 	</select>
 

@@ -29,6 +29,9 @@ public class AlbumTemplate extends SqlInputBaseDto implements Serializable {
     @Column(name = "template_photo_size")
     private Integer templatePhotoSize;
 
+    @Column(name = "template_html_path")
+    private String templateHtmlPath;
+
     public Integer getId() {
         return id;
     }
@@ -67,5 +70,13 @@ public class AlbumTemplate extends SqlInputBaseDto implements Serializable {
 
     public void setTemplatePhotoSize(Integer templatePhotoSize) {
         this.templatePhotoSize = templatePhotoSize;
+    }
+
+    public String getTemplateHtmlPath() {
+        return templateHtmlPath;
+    }
+
+    public void setTemplateHtmlPath(String templateHtmlPath) {
+        this.templateHtmlPath = templateHtmlPath;
     }
 }

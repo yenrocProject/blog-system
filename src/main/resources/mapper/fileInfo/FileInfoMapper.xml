@@ -26,7 +26,7 @@
 			last_modified_date AS lastModifiedDate,
 			is_del AS isDel
 		FROM
-			file2
+			file
 		WHERE
 			fileName = #{fileName, jdbcType=VARCHAR}
 	</select>
