@@ -1,15 +1,14 @@
 package com.yenroc.ho.blogic.java.album.impl;
 
 import com.yenroc.ho.blogic.java.album.EditAlbumService;
+import com.yenroc.ho.blogic.restDto.album.editAlbum.AlbumStyleCssVo;
 import com.yenroc.ho.blogic.restDto.album.editAlbum.EditAlbumPhotoVo;
 import com.yenroc.ho.blogic.restDto.album.editAlbum.EditAlbumVo;
 import com.yenroc.ho.blogic.sqlDto.albumPhotoInstance.AlbumPhotoInfo;
 import com.yenroc.ho.config.BlogGlobalConfig;
 import com.yenroc.ho.mapper.*;
-import com.yenroc.ho.mapper.entity.AlbumInstance;
-import com.yenroc.ho.mapper.entity.AlbumTemplate;
-import com.yenroc.ho.mapper.entity.AlbumTemplatePhotoConfig;
-import com.yenroc.ho.mapper.entity.User;
+import com.yenroc.ho.mapper.entity.*;
+import com.yenroc.ho.utils.BeanCopierEx;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +41,9 @@ public class EditAlbumServiceImpl implements EditAlbumService {
     private AlbumPhotoInstanceDao albumPhotoInstanceDao;
 
     @Autowired
+    private AlbumStyleCssDao albumStyleCssDao;
+
+    @Autowired
     private BlogGlobalConfig blogGlobalConfig;
 
     /**
@@ -50,7 +52,7 @@ public class EditAlbumServiceImpl implements EditAlbumService {
      * @param templateId
      * @return
      */
-    public ModelAndView editAlbum(String userName, Integer templateId){
+    public ModelAndView editAlbum(String userName, Integer templateId) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         ModelAndView mv = new ModelAndView();
         mv.addObject("userName", "defalut");
         EditAlbumVo editAlbumVo = new EditAlbumVo();
@@ -97,6 +99,13 @@ public class EditAlbumServiceImpl implements EditAlbumService {
         }
         log.info("获取模板得配置信息结果=[{}]", editAlbumVo);
         mv.addObject("albumInfo", editAlbumVo);
+
+        List<AlbumStyleCss> albumStyleCsses = albumStyleCssDao.selectAll();
+        if (albumStyleCsses.size() > 0) {
+            ArrayList<AlbumStyleCssVo> albumStyleCssVos = BeanCopierEx.copy(albumStyleCsses, AlbumStyleCssVo.class);
+            mv.addObject("albumStyleCssList", albumStyleCssVos);
+        }
+
         mv.setViewName("edit.html");
         return mv;
     }
@@ -107,7 +116,7 @@ public class EditAlbumServiceImpl implements EditAlbumService {
      * @param templateId
      * @return
      */
-    public ModelAndView editAlbum(String userName, Integer templateId, Integer albumId){
+    public ModelAndView editAlbum(String userName, Integer templateId, Integer albumId) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         ModelAndView mv = new ModelAndView();
         mv.addObject("userName", "defalut");
         List<User> users = userDao.finByUserName(userName);
@@ -156,12 +165,21 @@ public class EditAlbumServiceImpl implements EditAlbumService {
                 editAlbumPhotoVo.setPhotoWidth(albumPhotoInfo.getPhotoWidth());
                 editAlbumPhotoVo.setPhotoWidth(albumPhotoInfo.getPhotoWidth());
                 editAlbumPhotoVo.setId(albumPhotoInfo.getAlbumPhotoInstanceId());
+                editAlbumPhotoVo.setFileName(albumPhotoInfo.getFileName());
+                // 通过文件服务器提供的预览,可使用nginx
+                editAlbumPhotoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
                 photoVoList.add(editAlbumPhotoVo);
             }
             editAlbumVo.setAlbumPhotoVoList(photoVoList);
         }
         log.info("获取相册实例信息结果=[{}]", editAlbumVo);
         mv.addObject("albumInfo", editAlbumVo);
+        List<AlbumStyleCss> albumStyleCsses = albumStyleCssDao.selectAll();
+        if (albumStyleCsses.size() > 0) {
+            ArrayList<AlbumStyleCssVo> albumStyleCssVos = BeanCopierEx.copy(albumStyleCsses, AlbumStyleCssVo.class);
+            mv.addObject("albumStyleCssList", albumStyleCssVos);
+        }
+
         mv.setViewName("edit.html");
         return mv;
     }

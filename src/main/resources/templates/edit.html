@@ -93,55 +93,34 @@
         <div class="col-sm-4" style="background-color:lavender;">
             <h2>相册信息</h2>
             <form method="post" action="api/album/createOrUpate">
-                <input hidden id="albumId" th:value="${albumInfo.id}">
-                <input hidden id="albumTemplateId" th:value="${albumInfo.albumTemplateId}">
-                <input hidden id="userId" th:value="${albumInfo.userId}">
+                <input hidden name="albumId" th:value="${albumInfo.id}">
+                <input hidden name="albumTemplateId" th:value="${albumInfo.albumTemplateId}">
+                <input hidden name="userId" th:value="${albumInfo.userId}">
 
                 <div class="form-group">
                     <label>相册名称:</label>
-                    <input type="text" class="form-control" id="albumName" th:value="${albumInfo.albumName}">
+                    <input type="text" class="form-control" name="albumName" th:value="${albumInfo.albumName}">
                 </div>
                 <div class="form-group">
                     <label>相册描述:</label>
-                    <input type="text" class="form-control" id="albumDesc" th:value="${albumInfo.albumDesc}">
+                    <input type="text" class="form-control" name="albumDesc" th:value="${albumInfo.albumDesc}">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox">
+                            <input type="checkbox" name="privateView" th:value="${albumInfo.privateView}"
+                                   th:checked="${albumInfo.privateView}eq '1'">
                         </div>
                     </div>
                     <input type="text" class="form-control" placeholder="仅自己可见">
                 </div>
                 <div class="form-group">
                     <label>选择展示方式:</label>
-                    <select class="form-control" id="albumStyleCss">
-                        <option value="ih-item square effect1 left_and_right">effect1 left_and_right</option>
-                        <option value="ih-item square colored effect1 left_and_right">colored effect1 left_and_right</option>
-                        <option value="ih-item square effect1 top_to_bottom">effect1 top_to_bottom</option>
-                        <option value="ih-item square effect1 bottom_to_top">effect1 bottom_to_top</option>
-                        <option value="ih-item square effect2">effect2</option>
-                        <option value="ih-item square colored effect2">colored effect2</option>
-                        <option value="ih-item square effect3 bottom_to_top">effect3 bottom_to_top</option>
-                        <option value="ih-item square colored effect3 bottom_to_top">colored effect3 bottom_to_top</option>
-                        <option value="ih-item square effect3 top_to_bottom">effect3 top_to_bottom</option>
-                        <option value="ih-item square colored effect3 top_to_bottom">colored effect3 top_to_bottom</option>
-                        <option value="ih-item square effect4">effect4</option>
-                        <option value="ih-item square colored effect4">colored effect4</option>
-                        <option value="ih-item square effect5 left_to_right">effect5 effect5 left_to_right</option>
-                        <option value="ih-item square colored effect5 left_to_right">colored effect5 left_to_right</option>
-                        <option value="ih-item square effect5 right_to_left">effect5 right_to_left</option>
-                        <option value="ih-item square colored effect5 right_to_left">colored effect5 right_to_left</option>
-                        <option value="ih-item square effect6 from_top_and_bottom">effect6 from_top_and_bottom</option>
-                        <option value="ih-item square colored effect6 from_top_and_bottom">colored effect6 from_top_and_bottom</option>
-                        <option value="ih-item square effect6 from_left_and_right">effect6 from_left_and_right</option>
-                        <option value="ih-item square colored effect6 from_left_and_right">colored effect6 from_left_and_right</option>
-                        <option value="ih-item square effect6 top_to_bottom">effect6 top_to_bottom</option>
-                        <option value="ih-item square colored effect6 top_to_bottom">colored effect6 top_to_bottom</option>
-                        <option value="ih-item square effect6 bottom_to_top">effect6 bottom_to_top</option>
-                        <option value="ih-item square colored effect6 bottom_to_top">colored effect6 bottom_to_top</option>
-                        <option value="ih-item square effect7">effect7</option>
-                        <option value="ih-item square colored effect7">colored effect7</option> <!-- 该 Hover effect 8-->
+                    <select class="form-control" name="albumStyleCss" >
+                        <option th:each="albumStyleCss :${albumStyleCssList}"
+                                th:value="${albumStyleCss.optionValue}"
+                                th:selected="${albumStyleCss.optionValue eq albumInfo.albumStyleCss}"
+                                th:text="${albumStyleCss.optionName}"></option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>

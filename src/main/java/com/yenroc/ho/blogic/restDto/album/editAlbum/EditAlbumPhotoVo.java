@@ -20,4 +20,8 @@ public class EditAlbumPhotoVo implements Serializable {
 
     private Integer photoHeight;
 
+    private String fileName;
+
+    private String photoUrl;
+
 }

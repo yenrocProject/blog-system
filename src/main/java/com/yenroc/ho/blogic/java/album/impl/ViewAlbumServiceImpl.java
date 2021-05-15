@@ -132,7 +132,7 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
                 AlbumPhotoInfoVo albumPhotoInfoVo = new AlbumPhotoInfoVo();
                 albumPhotoInfoVo.setAlbumPhotoInstanceId(albumPhotoInfo.getAlbumPhotoInstanceId());
                 // 自带提供的预览
-                albumPhotoInfoVo.setFileName("/api/file/preview/" + albumPhotoInfo.getFileName());
+                albumPhotoInfoVo.setFileName(albumPhotoInfo.getFileName());
                 // 通过文件服务器提供的预览,可使用nginx
                 albumPhotoInfoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
                 albumPhotoInfoVos.add(albumPhotoInfoVo);

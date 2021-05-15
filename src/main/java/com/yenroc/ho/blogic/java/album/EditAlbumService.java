@@ -10,7 +10,7 @@ public interface EditAlbumService {
      * @param templateId
      * @return
      */
-    ModelAndView editAlbum(String userName, Integer templateId);
+    ModelAndView editAlbum(String userName, Integer templateId) throws IllegalAccessException, ClassNotFoundException, InstantiationException;
 
     /**
      * 创建模板相册
@@ -18,6 +18,6 @@ public interface EditAlbumService {
      * @param templateId
      * @return
      */
-    ModelAndView editAlbum(String userName, Integer templateId, Integer albumId);
+    ModelAndView editAlbum(String userName, Integer templateId, Integer albumId) throws IllegalAccessException, ClassNotFoundException, InstantiationException;
 
 }
