@@ -176,9 +176,9 @@
             headers: { "Content-Type": "application/json;charset=utf-8" },
             success: function (result) {
                 console.log(result);//打印服务端返回的数据(调试用)
-                if (result.data.resultCode == 200) {
-                    $("#albumId").val(result.data.albumId);
-                    alert("Submit success..");
+                if (result.data.responseCode == '200') {
+                    $("#albumId").val(result.data.dataResult.albumId);
+                    alert("submit success..");
                 }
             },
             error : function() {
