@@ -13,6 +13,7 @@ public class AlbumInstance extends SqlInputBaseDto implements Serializable {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(generator = "JDBC",strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "album_template_id")

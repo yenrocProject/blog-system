@@ -90,10 +90,10 @@
 <div class="container-fluid">
     <h1>定制属于 <span> yenroc.Ho </span> 的个性相册!</h1>
     <div class="row">
-        <div class="col-sm-4" style="background-color:lavender;">
+        <div class="col-sm-3" style="background-color:lavender;">
             <h2>相册信息</h2>
-            <form method="post" action="api/album/createOrUpate">
-                <input hidden name="albumId" th:value="${albumInfo.id}">
+            <form id="albumForm">
+                <input id="albumId" hidden name="albumId" th:value="${albumInfo.id}">
                 <input hidden name="albumTemplateId" th:value="${albumInfo.albumTemplateId}">
                 <input hidden name="userId" th:value="${albumInfo.userId}">
 
@@ -123,26 +123,25 @@
                                 th:text="${albumStyleCss.optionName}"></option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+            <button type="button" onclick="submit()" class="btn btn-primary">Submit</button>
         </div>
-        <div class="col-sm-8" style="background-color:lavenderblush;">
+        <div class="col-sm-9" style="background-color:lavenderblush;">
             <div id="app" class="container" v-cloak>
                 <div class="uploading-data" v-if="isUploading"></div>
                 <div class="upload-img-column">
-                    <div class="text-muted" id='words'>上传图片({{imgTempList.length}}/{{maxImages}})</div>
+                    <div class="text-muted" id='words'>上传图片</div>
                     <div class="upload-wrap">
-                        <div class="box">
-                            <label class="p dotted">
-                                <input type="file" accept="image/jpg,image/jpeg,image/png" name="file"
-                                       @change="onChooseImage($event)"/>
-                                <img src="/base/images/jiahao.png" alt="">
-                            </label>
-                        </div>
-                        <template v-for="(imgItem, imgIndex) in imgTempList">
+
+                        <template  v-for="(imgItem, imgIndex) in imgTempList" > <!-- v-for="(imgItem, imgIndex) in imgTempList" -->
                             <div class="box">
-                                <div class="p">
-                                    <img :src="imgItem">
+                                <label class="p dotted" v-if="imgItem.fileName == null">
+                                    <input type="file" accept="image/jpg,image/jpeg,image/png" name="file"
+                                           @change="onChooseImage($event, imgIndex)"/>
+                                    <img src="/base/images/jiahao.png" alt="">
+                                </label>
+                                <div class="p" v-else>
+                                    <img :src="imgItem.photoUrl">
                                     <div class="delete" @click.stop="deleteImg(imgIndex)">
                                         <img src="/base/images/guanbi.png" alt="">
                                     </div>
@@ -152,27 +151,47 @@
                     </div>
                 </div>
                 <button class="l-btn" @click="onUploadImg">上传</button>
-                <!-- 图片上传成功后返回的路径(没必要的) -->
-                <div class="success-path">
-                    <template v-for="(item, index) in successPath">
-                        <a :href="item" target="_blank">{{item}}</a>
-                    </template>
-                </div>
             </div>
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
+<script th:inline="javascript">
     var root_url = "";
-    maxImages = [[${albumInfo.templatePhotoSize}]];
+    albumInfo = /*[[${albumInfo}]]*/ {};
+    tempList = albumInfo.albumPhotoVoList;
+    function submit() {
+        var data={};
+        var formArray = $('#albumForm').serializeArray();
+        $.each(formArray, function(index, field) {
+            data[field.name] = field.value; //通过变量，将属性值，属性一起放到对象中
+        });
+        data['privateView'] =  $("[name='privateView']").prop('checked') ? 1:0;// 是否开放
+        data['albumPhotos'] = tempList;
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "/api/album/createOrUpdate" ,//url
+            data: JSON.stringify(data),
+            headers: { "Content-Type": "application/json;charset=utf-8" },
+            success: function (result) {
+                console.log(result);//打印服务端返回的数据(调试用)
+                if (result.data.resultCode == 200) {
+                    $("#albumId").val(result.data.albumId);
+                    alert("Submit success..");
+                }
+            },
+            error : function() {
+                alert("异常！");
+            }
+        });
+    }
 
     var app = new Vue({
         el: '#app',
         data: {
-            imgTempList: [], //图片临时路径列表
-            isUploading: false, //是否正在上传
-            successPath: [], //上传成功后的路径(没必要)
+            imgTempList: tempList, //图片临时路径列表
+            isUploading: false //是否正在上传,在上传的时候遮罩
         },
         mounted: function () {
             var that = this;
@@ -180,15 +199,9 @@
         watch: {},
         methods: {
             //选择图片
-            onChooseImage: function (event) {
+            onChooseImage: function (event, idx) {
                 var that = this;
-                debugger
-                //判断图片数量是否已上限
-                var currentImgTempArray = that.imgTempList;
-                if (currentImgTempArray.length >= maxImages) {
-                    alert("最多上传"+maxImages+"张图片");
-                    return false;
-                }
+                // var currentImgTempArray = that.imgTempList;
 
                 //使用FileReader对文件对象进行操作
                 var reader = new FileReader();
@@ -202,72 +215,72 @@
                         quality: 0.8,
                         success: function (src) {
                             //将压缩后的路径 追加到临时路径数组中
-                            var totalList = [];
-                            if (currentImgTempArray.length > 0) {
-                                totalList = currentImgTempArray.concat(src);
-                            } else {
-                                totalList[0] = src;
-                            }
-                            that.imgTempList = totalList;
+                            that.imgTempList[idx].data = src;
+                            // var totalList = [];
+                            // if (currentImgTempArray.length > 0) {
+                            //     totalList = currentImgTempArray.concat(src);
+                            // } else {
+                            //     totalList[0] = src;
+                            // }
+                            // that.imgTempList = totalList;
                         }
                     });
                 };
-
             },
 
             //删除某张图片
             deleteImg: function (idx) {
                 var that = this;
-                that.imgTempList.splice(idx, 1);
+                tempList[idx].fileId=null;
+                tempList[idx].fileName=null;
+                tempList[idx].photoUrl=null;
             },
-
 
             //提交上传图片
             onUploadImg: function () {
                 var that = this;
                 var imgTempList = that.imgTempList;
-                debugger
                 if (imgTempList.length > 0) {
                     that.isUploading = true; //正在上传 显示遮罩层 防止连续点击
                     var countNum = 0; //计算数量用的 判断上传到第几张图片了
                     //map循环遍历上传图片
                     imgTempList.map(function (imgItem, imgIndex) {
-                        var files = that.dataURLtoFile(imgItem, 'pj' + Date.now() + '.jpg'); //DataURL转File
-                        console.log(photoList[imgIndex]);
-
-                        //创FormData对象
-                        var formdata = new FormData();
-                        //append(key,value)在数据末尾追加数据。 这儿的key值需要和后台定义保持一致
-                        formdata.append('file', files);
-
-                        //用axios上传，
-                        axios({
-                            method: "POST",
-                            //url: "http://www.clluo.com:8060/uploadImg",
-                            url: root_url + "api/albumPhoto/upload/" + photoList[imgIndex].id, // 相册映射的照片id
-                            data: formdata,
-                            headers: {
-                                "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7YqBcDwUevoFodcf"
-                            }
-                        }).then(function (res) {
+                        if (imgItem.data == null) {
                             countNum++;
+                            console.log("文件不做上传");
                             //图片全部上传完后去掉遮罩层
                             if (countNum >= imgTempList.length) {
                                 that.isUploading = false;
                             }
-
-                            //没必要的代码
-                            var list = [];
-                            if (that.successPath.length > 0) {
-                                list = that.successPath.concat(res.data.path);
-                            } else {
-                                list[0] = res.data.path;
-                            }
-                            that.successPath = list;
-
-                        }).catch(function (error) {
-                            console.error(error);
-                        });
+                        } else {
+                            var files = that.dataURLtoFile(imgItem.data, 'pj' + Date.now() + '.jpg'); //DataURL转File
+                            //创FormData对象
+                            var formdata = new FormData();
+                            //append(key,value)在数据末尾追加数据。 这儿的key值需要和后台定义保持一致
+                            formdata.append('file', files);
+                            //用axios上传，
+                            axios({
+                                method: "POST",
+                                //url: "http://www.clluo.com:8060/uploadImg",
+                                url: root_url + "/api/file/upload", // 相册映射的照片id
+                                data: formdata,
+                                headers: {
+                                    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7YqBcDwUevoFodcf"
+                                }
+                            }).then(function (res) {
+                                if (res.data.responseCode === '200') {
+                                    imgTempList[imgIndex].fileName = res.data.dataResult;
+                                    imgTempList[imgIndex].data = null;
+                                }
+                                countNum++;
+                                //图片全部上传完后去掉遮罩层
+                                if (countNum >= imgTempList.length) {
+                                    that.isUploading = false;
+                                }
+                            }).catch(function (error) {
+                                console.error(error);
+                            });
+                        }
                     });
                 }
             },

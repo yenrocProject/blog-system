@@ -4,11 +4,13 @@ import com.yenroc.ho.blogic.java.album.EditAlbumService;
 import com.yenroc.ho.blogic.restDto.album.editAlbum.AlbumStyleCssVo;
 import com.yenroc.ho.blogic.restDto.album.editAlbum.EditAlbumPhotoVo;
 import com.yenroc.ho.blogic.restDto.album.editAlbum.EditAlbumVo;
+import com.yenroc.ho.blogic.restDto.album.viewAlbum.AlbumPhotoInfoVo;
 import com.yenroc.ho.blogic.sqlDto.albumPhotoInstance.AlbumPhotoInfo;
 import com.yenroc.ho.config.BlogGlobalConfig;
 import com.yenroc.ho.mapper.*;
 import com.yenroc.ho.mapper.entity.*;
 import com.yenroc.ho.utils.BeanCopierEx;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -165,11 +169,15 @@ public class EditAlbumServiceImpl implements EditAlbumService {
                 editAlbumPhotoVo.setPhotoWidth(albumPhotoInfo.getPhotoWidth());
                 editAlbumPhotoVo.setPhotoWidth(albumPhotoInfo.getPhotoWidth());
                 editAlbumPhotoVo.setId(albumPhotoInfo.getAlbumPhotoInstanceId());
-                editAlbumPhotoVo.setFileName(albumPhotoInfo.getFileName());
                 // 通过文件服务器提供的预览,可使用nginx
-                editAlbumPhotoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
+                if (StringUtils.isNotBlank(albumPhotoInfo.getFileName())) {
+                    editAlbumPhotoVo.setFileId(albumPhotoInfo.getFileId());
+                    editAlbumPhotoVo.setFileName(albumPhotoInfo.getFileName());
+                    editAlbumPhotoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
+                }
                 photoVoList.add(editAlbumPhotoVo);
             }
+            photoVoList = photoVoList.stream().sorted(Comparator.comparing(EditAlbumPhotoVo::getId)).collect(Collectors.toList());
             editAlbumVo.setAlbumPhotoVoList(photoVoList);
         }
         log.info("获取相册实例信息结果=[{}]", editAlbumVo);

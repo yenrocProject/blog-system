@@ -3,9 +3,7 @@ package com.yenroc.ho.mapper.entity;
 
 import com.yenroc.ho.blogic.sqlDto.SqlInputBaseDto;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Table(name="album_template_text_config")
@@ -15,6 +13,7 @@ public class AlbumTemplateTextConfig extends SqlInputBaseDto implements Serializ
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(generator = "JDBC",strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "album_template_id")

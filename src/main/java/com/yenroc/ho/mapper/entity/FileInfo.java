@@ -1,9 +1,9 @@
 package com.yenroc.ho.mapper.entity;
 
 import com.yenroc.ho.blogic.sqlDto.SqlInputBaseDto;
-import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -13,6 +13,7 @@ public class FileInfo extends SqlInputBaseDto implements Serializable {
     private static final long serialVersionUID = -7241063697538687240L;
 
     // 文件id
+    @Id
     @Column(name = "id")
     private String id;
 

@@ -11,6 +11,8 @@ public class AlbumPhotoInfo implements Serializable {
 
     private Integer albumPhotoInstanceId;
 
+    private String fileId;
+
     private String fileName;
 
     private String photoUrl;

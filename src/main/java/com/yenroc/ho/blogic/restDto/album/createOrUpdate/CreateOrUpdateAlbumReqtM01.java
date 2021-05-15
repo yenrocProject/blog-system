@@ -1,12 +1,11 @@
-package com.yenroc.ho.blogic.restDto.album.editAlbum;
+package com.yenroc.ho.blogic.restDto.album.createOrUpdate;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 
 @Data
-public class EditAlbumPhotoVo implements Serializable {
+public class CreateOrUpdateAlbumReqtM01 implements Serializable {
 
     private static final long serialVersionUID = -7241063697538687240L;
 
@@ -25,5 +24,4 @@ public class EditAlbumPhotoVo implements Serializable {
     private String fileName;
 
     private String photoUrl;
-
 }

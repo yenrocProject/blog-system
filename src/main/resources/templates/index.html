@@ -76,7 +76,8 @@
 
 </head>
 <body>
-<h1>定制属于 <span> yenroc.Ho </span> 的个性相册!</h1>
+<span>退出登录<span>
+<h1>定制属于 <span th:text="${userName}"></span> 的个性相册!</h1>
 
 <!--<h3 id="templateAlbum" class="section-heading">相册模板</h3>-->
 
@@ -104,8 +105,8 @@
 
 <h1 style="margin: 60px auto 30px;position:relative">我的相册</h1>
 <div class="bs-example">
-    <div class="row" th:each="userAlbum:${userAlbums}">
-        <div class="col-sm-4">
+    <div class="row">
+        <div class="col-sm-4" th:each="userAlbum:${userAlbums}">
             <!-- normal -->
             <div th:class= "${userAlbum.albumStyleCss}">
                 <a th:href="@{/{userName}/{templateId}/{userAlbumId}.html?album_key={privateKey}(userName=${userName},templateId=${userAlbum.templateId},userAlbumId=${userAlbum.userAlbumId},privateKey=${userAlbum.privateKey})}">
@@ -125,8 +126,8 @@
 
 <h3 id="publicAlbum" class="section-heading">猜你喜欢</h3>
 <div class="bs-example">
-    <div class="row" th:each="publicAlbum:${publicAlbums}">
-        <div class="col-sm-4">
+    <div class="row">
+        <div class="col-sm-4" th:each="publicAlbum:${publicAlbums}">
             <!-- normal -->
             <div th:class= "${publicAlbum.albumStyleCss}">
                 <a th:href="@{/{userName}/{templateId}/{userAlbumId}.html(userName=${userName},templateId=${publicAlbum.templateId},userAlbumId=${publicAlbum.albumId})}">
@@ -136,19 +137,10 @@
                         <p th:text="${publicAlbum.albumDesc}"></p>
                     </div>
                 </a>
-            </div><br/><br/>
-            <!-- end normal -->
-        </div>
-        <!-- end normal -->
-        <div class="col-sm-4">
-            <!-- normal -->
-            <div class="ih-item square effect6 from_left_and_right"><a href="#">
-                <div class="img"><img src="/base/images/assets/rect/2.jpg" alt="img"></div>
-                <div class="info">
-                    <h3>Heading here</h3>
-                    <p>Description goes here</p>
-                </div>
-            </a></div><br/><br/>
+            </div>
+            <span th:text="作者+${userName}" style="top: 10px;position: relative;font-size: 18px"
+                  class="sparkley"></span>
+            <span></span>
             <!-- end normal -->
         </div>
     </div>

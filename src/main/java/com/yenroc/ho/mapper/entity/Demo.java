@@ -1,8 +1,6 @@
 package com.yenroc.ho.mapper.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,6 +16,7 @@ public class Demo implements Serializable {
      */
     @Id
     @Column(name = "id")
+    @GeneratedValue(generator = "JDBC",strategy = GenerationType.AUTO)
     private String id;
 
     /**

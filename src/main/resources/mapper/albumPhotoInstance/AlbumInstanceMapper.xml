@@ -15,6 +15,7 @@
 			resultType="com.yenroc.ho.blogic.sqlDto.albumPhotoInstance.AlbumPhotoInfo">
 		SELECT
 			t1.id AS albumPhotoInstanceId,
+			t1.file_id AS fileId,
 			t2.fileName AS fileName,
 			t2.fileFullPath AS photoUrl,
 			t3.photo_config_name AS photoConfigName,

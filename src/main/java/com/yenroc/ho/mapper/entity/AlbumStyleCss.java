@@ -3,9 +3,7 @@ package com.yenroc.ho.mapper.entity;
 
 import com.yenroc.ho.blogic.sqlDto.SqlInputBaseDto;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Table(name="album_style_css")
@@ -15,6 +13,7 @@ public class AlbumStyleCss extends SqlInputBaseDto implements Serializable {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(generator = "JDBC",strategy = GenerationType.AUTO)
     private Integer id;
 
     @Column(name = "option_name")

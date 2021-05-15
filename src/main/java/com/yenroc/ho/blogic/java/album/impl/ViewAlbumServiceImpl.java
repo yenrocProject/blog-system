@@ -131,18 +131,14 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
             for (AlbumPhotoInfo albumPhotoInfo : albumPhotoInfos) {
                 AlbumPhotoInfoVo albumPhotoInfoVo = new AlbumPhotoInfoVo();
                 albumPhotoInfoVo.setAlbumPhotoInstanceId(albumPhotoInfo.getAlbumPhotoInstanceId());
-                // 自带提供的预览
-                albumPhotoInfoVo.setFileName(albumPhotoInfo.getFileName());
-                // 通过文件服务器提供的预览,可使用nginx
-                albumPhotoInfoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
+                if (StringUtils.isNotBlank(albumPhotoInfo.getFileName())) {
+                    // 自带提供的预览
+                    albumPhotoInfoVo.setFileName(albumPhotoInfo.getFileName());
+                    // 通过文件服务器提供的预览,可使用nginx
+                    albumPhotoInfoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
+                }
                 albumPhotoInfoVos.add(albumPhotoInfoVo);
             }
-//            Collections.sort(albumPhotoInfoVos, new Comparator<AlbumPhotoInfoVo>() {
-//                @Override
-//                public int compare(AlbumPhotoInfoVo o1, AlbumPhotoInfoVo o2) {
-//                    return o1.getAlbumPhotoInstanceId() - o2.getAlbumPhotoInstanceId();
-//                }
-//            });
             albumPhotoInfoVos = albumPhotoInfoVos.stream().sorted(Comparator.comparing(AlbumPhotoInfoVo::getAlbumPhotoInstanceId)).collect(Collectors.toList());
             ;
         }

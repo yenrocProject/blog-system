@@ -26,14 +26,14 @@ public class RestAspect {
     
     @Around("pointCut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.debug("Enter: {}.{}() with argument[s] = {}",
+        log.info("Enter: {}.{}() with argument[s] = {}",
                 joinPoint.getSignature().getDeclaringTypeName(),
                 joinPoint.getSignature().getName(),
                 Arrays.toString(joinPoint.getArgs()));
         try {
             long st = System.currentTimeMillis();
             Object result = joinPoint.proceed();
-            log.debug("Exit: {}.{}() 耗时=[{}ms]with result = {}",
+            log.info("Exit: {}.{}() 耗时=[{}ms]with result = {}",
                     joinPoint.getSignature().getDeclaringTypeName(),
                     joinPoint.getSignature().getName(),
                     (System.currentTimeMillis() - st),

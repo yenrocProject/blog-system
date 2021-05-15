@@ -1,5 +1,7 @@
 package com.yenroc.ho.rest.album;
 
+import com.yenroc.ho.blogic.restDto.album.createOrUpdate.CreateOrUpdateAlbumReqt;
+import com.yenroc.ho.blogic.restDto.album.createOrUpdate.CreateOrUpdateAlbumResp;
 import com.yenroc.ho.blogic.restDto.user.UserCreateAndLoginReqt;
 import com.yenroc.ho.blogic.restDto.user.UserCreateAndLoginResp;
 import com.yenroc.ho.common.bean.ResponseResult;
@@ -25,12 +27,24 @@ public class AlbumResource {
     @Qualifier("UserCreateAndLoginBLogic")
     private BizLogic<UserCreateAndLoginReqt, UserCreateAndLoginResp> userCreateAndLoginBLogic;
 
+    @Autowired
+    @Qualifier("CreateOrUpdateAlbumBLogic")
+    private BizLogic<CreateOrUpdateAlbumReqt, CreateOrUpdateAlbumResp> createOrUpdateAlbumBLogic;
+
 
     @PostMapping("/albumUser/createAndLogin")
     @ApiOperation(value="创建用户或登录", notes="创建用户或登录")
     public ResponseEntity<ResponseResult> UserCreate(@RequestBody UserCreateAndLoginReqt param) throws Exception {
         log.info("REST 创建用户或登录开始,入参=[{}]", param);
         UserCreateAndLoginResp execute = userCreateAndLoginBLogic.execute(param);
+        return new ResponseEntity<>(ResponseResult.success(execute), HttpStatus.OK);
+    }
+
+    @PostMapping("/album/createOrUpdate")
+    @ApiOperation(value="创建用户或登录", notes="创建用户或登录")
+    public ResponseEntity<ResponseResult> createOrUpate(@RequestBody CreateOrUpdateAlbumReqt param) throws Exception {
+        log.info("REST 创建或者更新相册信息接口开发=[{}]", param);
+        CreateOrUpdateAlbumResp execute = createOrUpdateAlbumBLogic.execute(param);
         return new ResponseEntity<>(ResponseResult.success(execute), HttpStatus.OK);
     }
 
