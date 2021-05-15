@@ -55,7 +55,7 @@
         }
 
         .sparkley {
-            color: rgba(55, 55, 55, 0.8);
+            color: rgba(22, 22, 22, 1);
             border: none;
             padding: 16px 36px;
             font-weight: normal;
@@ -93,8 +93,9 @@
                         <p th:text="${albumTemplate.templateDesc}"></p>
                     </div>
                 </a>
-                <!--                <button style="top:-50px;" class="sparkley">制作</button>-->
             </div>
+            <a th:href="@{/{userName}/edit/{templateId}.html(userName=${userName},templateId=${albumTemplate.templateId})}"
+               style="top: 10px;position: relative;font-size: 18px" class="sparkley">创作</a>
             <!-- end normal -->
         </div>
     </div>
@@ -114,19 +115,9 @@
                         <p th:text="${userAlbum.albumDesc}"></p>
                     </div>
                 </a>
-            </div><br/><br/>
-            <!-- end normal -->
-        </div>
-        <!-- end normal -->
-        <div class="col-sm-4">
-            <!-- normal -->
-            <div class="ih-item square effect6 from_left_and_right"><a href="#">
-                <div class="img"><img src="/base/images/assets/rect/2.jpg" alt="img"></div>
-                <div class="info">
-                    <h3>Heading here</h3>
-                    <p>Description goes here</p>
-                </div>
-            </a></div><br/><br/>
+            </div>
+            <a th:href="@{/{userName}/edit/{templateId}/{albumId}.html(userName=${userName},templateId=${userAlbum.templateId},albumId=${userAlbum.userAlbumId})}"
+               style="top: 10px;position: relative;font-size: 18px" class="sparkley">编辑</a>
             <!-- end normal -->
         </div>
     </div>

@@ -7,31 +7,29 @@
  @date: 2019年9月20日
  -->
 <!--指定dao -->
-<mapper namespace="com.yenroc.ho.mapper.AlbumInstanceDao">
+<mapper namespace="com.yenroc.ho.mapper.AlbumTemplatePhotoConfigDao">
 	<!--查询-->
-	<select id="finByUserId"
+	<select id="findByTemplateId"
 			useCache="true"
 			parameterType="java.lang.Integer"
-			resultType="com.yenroc.ho.mapper.entity.AlbumInstance">
+			resultType="com.yenroc.ho.mapper.entity.AlbumTemplatePhotoConfig">
 		SELECT
 			id AS id,
-			album_name AS albumName,
-			album_desc AS albumDesc,
 			album_template_id AS albumTemplateId,
-			private_view AS privateView,
-			private_key AS privateKey,
-			album_style_css AS albumStyleCss,
-			default_view_photo AS defaultViewPhoto,
+			photo_config_name AS photoConfigName,
+			photo_desc AS photoDesc,
+			photo_width AS photoWidth,
+			photo_height AS photoHeight,
 			created_by AS createdBy,
 			created_date AS createdDate,
 			last_modified_by AS lastModifiedBy,
 			last_modified_date AS lastModifiedDate,
 			is_del AS isDel
 		FROM
-			album_instance
+			album_template_photo_config
 		<where>
 			(IS_DEL = 0 OR IS_DEL IS NULL)
-			and user_id = #{userId, jdbcType=INTEGER}
+			and album_template_id = #{albumTemplateId, jdbcType=INTEGER}
 		</where>
 	</select>
 

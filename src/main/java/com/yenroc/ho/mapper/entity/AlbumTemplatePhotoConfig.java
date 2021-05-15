@@ -24,10 +24,7 @@ public class AlbumTemplatePhotoConfig extends SqlInputBaseDto implements Seriali
     private String photoConfigName;
 
     @Column(name = "photo_desc")
-    private Integer photoDesc;
-
-    @Column(name = "template_photo_size")
-    private Integer templatePhotoSize;
+    private String photoDesc;
 
     @Column(name = "photo_width")
     private Integer photoWidth;
@@ -59,20 +56,12 @@ public class AlbumTemplatePhotoConfig extends SqlInputBaseDto implements Seriali
         this.photoConfigName = photoConfigName;
     }
 
-    public Integer getPhotoDesc() {
+    public String getPhotoDesc() {
         return photoDesc;
     }
 
-    public void setPhotoDesc(Integer photoDesc) {
+    public void setPhotoDesc(String photoDesc) {
         this.photoDesc = photoDesc;
-    }
-
-    public Integer getTemplatePhotoSize() {
-        return templatePhotoSize;
-    }
-
-    public void setTemplatePhotoSize(Integer templatePhotoSize) {
-        this.templatePhotoSize = templatePhotoSize;
     }
 
     public Integer getPhotoWidth() {

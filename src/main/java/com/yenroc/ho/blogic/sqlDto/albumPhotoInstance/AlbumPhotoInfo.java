@@ -15,4 +15,12 @@ public class AlbumPhotoInfo implements Serializable {
 
     private String photoUrl;
 
+    private String photoConfigName;
+
+    private String photoDesc;
+
+    private Integer photoHeight;
+
+    private Integer photoWidth;
+
 }
