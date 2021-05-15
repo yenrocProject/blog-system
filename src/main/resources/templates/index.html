@@ -13,7 +13,6 @@
     <link rel="stylesheet" type="text/css" href="/base/css/default.css">
     <link rel="stylesheet" href="/base/styles/main.css"/>
     <style>
-
         html {
             font-family: Lato;
             font-weight: 200;
@@ -73,7 +72,16 @@
             background-color: Transparent;
         }
     </style>
-
+    <script>
+        window.onload=function (ev) {
+            var storage=window.localStorage;
+            var userName = storage.userName;
+            // 防止登录其他人页面
+            if (userName == null || !window.location.pathname.startsWith("/"+userName+"/")) {
+                window.document.location.href="../index.html"
+            }
+        }
+    </script>
 </head>
 <body>
 <h1>定制属于 <span th:text="${userName}"></span> 的个性相册!</h1>
@@ -123,7 +131,7 @@
     </div>
 </div>
 
-<h3 id="publicAlbum" class="section-heading">猜你喜欢</h3>
+<h1 style="margin: 60px auto 30px;position:relative">猜你喜欢</h1>
 <div class="bs-example">
     <div class="row">
         <div class="col-sm-4" th:each="publicAlbum:${publicAlbums}">
@@ -137,7 +145,7 @@
                     </div>
                 </a>
             </div>
-            <span th:text="作者+${userName}" style="top: 10px;position: relative;font-size: 18px"
+            <span th:text="作者+${publicAlbum.userName}" style="top: 10px;position: relative;font-size: 18px"
                   class="sparkley"></span>
             <span></span>
             <!-- end normal -->

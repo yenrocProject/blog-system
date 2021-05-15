@@ -114,6 +114,10 @@ public class UserAlbumInfoServiceImpl implements UserAlbumInfoService {
                 publicAlbumVo.setAlbumDesc(albumInstance.getAlbumDesc());
                 publicAlbumVo.setAlbumStyleCss(albumInstance.getAlbumStyleCss());
                 publicAlbumVo.setDefaultViewPhoto(blogGlobalConfig.getPhotoViewUrl() + albumInstance.getDefaultViewPhoto());
+                User user1 = userDao.selectByPrimaryKey(albumInstance.getUserId());
+                publicAlbumVo.setUserName(user1.getUserName());
+                publicAlbumVo.setUserNickName(user1.getNickName());
+
                 publicAlbumVos.add(publicAlbumVo);
             }
         }

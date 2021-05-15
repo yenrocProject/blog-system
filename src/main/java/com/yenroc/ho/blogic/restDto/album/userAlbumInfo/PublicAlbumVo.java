@@ -27,4 +27,9 @@ public class PublicAlbumVo {
 
     private String defaultViewPhoto;
 
+    private String userName;
+
+    private String userNickName;
+
+
 }
