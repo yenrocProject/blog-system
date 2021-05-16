@@ -174,6 +174,8 @@ public class EditAlbumServiceImpl implements EditAlbumService {
                     editAlbumPhotoVo.setFileId(albumPhotoInfo.getFileId());
                     editAlbumPhotoVo.setFileName(albumPhotoInfo.getFileName());
                     editAlbumPhotoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
+                    editAlbumPhotoVo.setPhotoUrl(StringUtils.replace(editAlbumPhotoVo.getPhotoUrl(),"\\","/"));
+
                 }
                 photoVoList.add(editAlbumPhotoVo);
             }

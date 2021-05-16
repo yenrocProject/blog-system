@@ -136,6 +136,7 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
                     albumPhotoInfoVo.setFileName(albumPhotoInfo.getFileName());
                     // 通过文件服务器提供的预览,可使用nginx
                     albumPhotoInfoVo.setPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumPhotoInfo.getPhotoUrl());
+                    albumPhotoInfoVo.setPhotoUrl(StringUtils.replace(albumPhotoInfoVo.getPhotoUrl(),"\\","/"));
                 }
                 albumPhotoInfoVos.add(albumPhotoInfoVo);
             }
@@ -144,6 +145,7 @@ public class ViewAlbumServiceImpl implements ViewAlbumService {
         }
         log.info("查看相册,图片信息=[{}]", albumPhotoInfoVos);
         mv.addObject("imageInfos",albumPhotoInfoVos);
+        mv.addObject("album",albumInstance);
 
         return mv;
     }

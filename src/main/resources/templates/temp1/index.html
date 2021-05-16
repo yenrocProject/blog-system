@@ -9,14 +9,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="true">
     <link rel="shortcut icon" href="/image/favicon.ico">
-    <title th:text="${userName}+的3D相册"></title>
+    <title th:text="${album.albumName}"></title>
     <script src="/temp1/js/analytics.js" async=""></script>
     <script src="/temp1/js/ge1doot.js"></script>
-    <script src="/temp1/js/jquery-3.2.1.js"></script>
+    <script src="/base/js/jquery-3.2.1.js"></script>
     <script src="/temp1/js/util.js"></script>
     <script src="/temp1/js/ga.js"></script>
     <script src="/temp1/js/imageTransform3D.js"></script>
-    <link rel="stylesheet" href="/temp1/css/slider-wb.css">
+    <link rel="stylesheet" href="/base/css/slider-wb.css">
     <style>
         html {
             overflow: hidden;
@@ -423,12 +423,12 @@
             <div class="container">
                 <div class="nav-on">
                     <ul class="menu">
-                        <li class="home"><a href="2.html">Youth</a></li>
+                        <li class="home"><a href="javascript:void(history.back())">Home</a></li>
                     </ul>
                 </div>
                 <div class="nav-off">
                     <div id="icon"><div></div><div></div></div>
-                    <h1 class="title">yenroc.Hoの3D相册</h1>
+                    <h1 class="title" th:text="${album.albumName}"></h1>
                 </div>
             </div>
         </label>

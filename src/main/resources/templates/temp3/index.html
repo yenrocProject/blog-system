@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:method="http://www.w3.org/1999/xhtml">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="Author" content="Gerard Ferrandez at http://www.dhteumeuleu.com/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/image/favicon.ico">
+    <title th:text="${album.albumName}"></title>
+    <link rel="stylesheet" href="/base/css/slider-wb.css">
+    <style type="text/css">
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body,html{
+            height:100%;
+        }
+        body{
+            background-image: url("/temp3/background-image.jpg");
+            background-size: 100% 100%;
+        }
+        #box{width: 280px;
+            height: 400px;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top:0;
+            bottom: 0;
+            margin: auto;
+            transform-style: preserve-3d;
+            transform: rotateX(0deg) rotateY(0deg);
+            animation: go 45s linear infinite;
+           }
+        #box img{width: 280px;
+                 height: 400px;
+                 position: absolute;
+                 left: 0;
+                 top: 0;
+        }
+        #box img:nth-child(1){transform: rotateY(0deg) translateZ(650px);}
+        #box img:nth-child(2){transform: rotateY(36deg) translateZ(650px);}
+        #box img:nth-child(3){transform: rotateY(72deg) translateZ(650px);}
+        #box img:nth-child(4){transform: rotateY(108deg) translateZ(650px);}
+        #box img:nth-child(5){transform: rotateY(144deg) translateZ(650px);}
+        #box img:nth-child(6){transform: rotateY(180deg) translateZ(650px);}
+        #box img:nth-child(7){transform: rotateY(216deg) translateZ(650px);}
+        #box img:nth-child(8){transform: rotateY(252deg) translateZ(650px);}
+        #box img:nth-child(9){transform: rotateY(288deg) translateZ(650px);}
+        #box img:nth-child(10){transform: rotateY(324deg) translateZ(650px);}
+		@keyframes go {
+		    0%{transform: rotateX(0deg) rotateY(0deg);}
+		    25%{transform: rotateX(20deg) rotateY(180deg);}
+		    50%{transform: rotateX(0deg) rotateY(360deg);}
+		    75%{transform: rotateX(-20deg) rotateY(540deg);}
+		    100%{transform: rotateX(0deg) rotateY(720deg);}
+		}
+	.m-main{width:1200px; height: 60px;margin: 0 auto}
+    </style>
+</head>
+<body>
+	<div id="nav">
+        <input name="nav-switch" id="nav-switch" type="checkbox">
+        <label class="label" for="nav-switch">
+            <div class="container">
+                <div class="nav-on">
+                    <ul class="menu">
+                        <li class="home"><a href="javascript:void(history.back())">Home</a></li>
+                    </ul>
+                </div>
+                <div class="nav-off">
+                    <div id="icon"><div></div><div></div></div>
+                    <h1 class="title" th:text="${album.albumName}"></h1>
+                </div>
+            </div>
+        </label>
+    </div>
+    <div id="box">
+        <img th:src="${imageInfos[0].photoUrl}">
+        <img th:src="${imageInfos[1].photoUrl}">
+        <img th:src="${imageInfos[2].photoUrl}">
+        <img th:src="${imageInfos[3].photoUrl}">
+        <img th:src="${imageInfos[4].photoUrl}">
+        <img th:src="${imageInfos[5].photoUrl}">
+        <img th:src="${imageInfos[6].photoUrl}">
+        <img th:src="${imageInfos[7].photoUrl}">
+        <img th:src="${imageInfos[8].photoUrl}">
+        <img th:src="${imageInfos[9].photoUrl}">
+    </div>
+    <div class="m-main" style="display:none;">
+		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="https://music.163.com/outchain/player?type=2&id=1441938283&auto=1&height=66"></iframe>
+	</div>
+</body>
+</html>

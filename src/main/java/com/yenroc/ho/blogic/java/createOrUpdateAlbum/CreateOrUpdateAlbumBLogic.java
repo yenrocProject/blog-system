@@ -50,7 +50,11 @@ public class CreateOrUpdateAlbumBLogic implements BizLogic<CreateOrUpdateAlbumRe
         if (AlbumConsts.ALBUM_VIEW_PRIVATE.equals(albumInstance.getPrivateView())) {
             albumInstance.setPrivateKey(Thread.currentThread().getName());
         }
-        if (arg0.getAlbumId() == null) {
+        if (arg0.getAlbumId() != null) {
+            albumInstance.setId(arg0.getAlbumId());
+            log.info("更新相册的描述信息...");
+            albumInstanceDao.updateByPrimaryKeySelective(albumInstance);
+        } else {
             // 设置相册默认照片
             AlbumTemplate albumTemplate = albumTemplateDao.selectByPrimaryKey(arg0.getAlbumTemplateId());
             AlbumInstance defaultAlbumInstance1 = albumInstanceDao.selectByPrimaryKey(albumTemplate.getDefaultInstanceId());
@@ -59,46 +63,40 @@ public class CreateOrUpdateAlbumBLogic implements BizLogic<CreateOrUpdateAlbumRe
             log.info("进行相册的创建...");
             int insert = albumInstanceDao.insert(albumInstance);
             log.info("插入数据{},结果={}", albumInstance, insert);
-        } else {
-            albumInstance.setId(arg0.getAlbumId());
-            log.info("更新相册的描述信息...");
-            albumInstanceDao.updateByPrimaryKeySelective(albumInstance);
-        }
-        Integer albumId = albumInstance.getId();
 
-        // 创建相册照片
-        String defaultViewPhotoUrl = "";
-        List<CreateOrUpdateAlbumReqtM01> albumPhotos = arg0.getAlbumPhotos();
-        if (albumPhotos.size() > 0) {
-            // 循环照片相册,存在 照片Id 为空, 则新增.照片Id 存在,则更新
-            for (CreateOrUpdateAlbumReqtM01 albumPhoto : albumPhotos) {
-                AlbumPhotoInstance albumPhotoInstance = new AlbumPhotoInstance();
-                albumPhotoInstance.setAlbumInstanceId(albumId);
-                // 表示新上传的文件
-                if (StringUtils.isNotBlank(albumPhoto.getFileName()) && albumPhoto.getId() == null) {
-                    albumPhotoInstance.setFileId(fileInfoDao.findByFileName(albumPhoto.getFileName()).getId());
-                }
-                // 取第一个照片作为该相册的默认显示照片
-                if (StringUtils.isBlank(defaultViewPhotoUrl) && albumPhotoInstance.getFileId() != null){
-                    defaultViewPhotoUrl = fileInfoDao.selectByPrimaryKey(albumPhotoInstance.getFileId()).getFileFullPath();
-                }
+            Integer albumId = albumInstance.getId();
 
-                albumPhotoInstance.setTemplateId(arg0.getAlbumTemplateId());
-                albumPhotoInstance.setUserId(arg0.getUserId());
-                if (albumPhoto.getId() == null) {
-                    albumPhotoInstanceDao.insert(albumPhotoInstance);
-                } else {
-                    albumPhotoInstanceDao.updateByPrimaryKey(albumPhotoInstance);
+            // 创建相册照片
+            String defaultViewPhotoUrl = "";
+            List<CreateOrUpdateAlbumReqtM01> albumPhotos = arg0.getAlbumPhotos();
+            if (albumPhotos.size() > 0) {
+                // 循环照片相册,存在 照片Id 为空, 则新增.照片Id 存在,则更新
+                for (CreateOrUpdateAlbumReqtM01 albumPhoto : albumPhotos) {
+                    AlbumPhotoInstance albumPhotoInstance = new AlbumPhotoInstance();
+                    albumPhotoInstance.setAlbumInstanceId(albumId);
+                    // 表示新上传的文件
+                    if (albumPhoto.getId() == null) {
+                        albumPhotoInstance.setFileId(fileInfoDao.findByFileName(albumPhoto.getFileName()).getId());
+                    }
+                    // 取第一个照片作为该相册的默认显示照片
+                    if (StringUtils.isBlank(defaultViewPhotoUrl) && albumPhotoInstance.getFileId() != null){
+                        defaultViewPhotoUrl = fileInfoDao.selectByPrimaryKey(albumPhotoInstance.getFileId()).getFileFullPath();
+                    }
+                    albumPhotoInstance.setTemplateId(arg0.getAlbumTemplateId());
+                    albumPhotoInstance.setUserId(arg0.getUserId());
+                    if (albumPhoto.getId() == null) {
+                        albumPhotoInstanceDao.insert(albumPhotoInstance);
+                    }
                 }
             }
-        }
-        // 不为空,则更新进去
-        if (StringUtils.isNotBlank(defaultViewPhotoUrl)) {
-            albumInstance.setDefaultViewPhoto(defaultViewPhotoUrl);
-            albumInstanceDao.updateByPrimaryKey(albumInstance);
+            // 不为空,则更新进去
+            if (StringUtils.isNotBlank(defaultViewPhotoUrl)) {
+                albumInstance.setDefaultViewPhoto(defaultViewPhotoUrl);
+                albumInstanceDao.updateByPrimaryKey(albumInstance);
+            }
         }
 
-        result.setAlbumId(albumId);
+        result.setAlbumId(albumInstance.getId());
         return result;
     }
 }

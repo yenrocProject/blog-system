@@ -12,6 +12,7 @@ import com.yenroc.ho.mapper.UserDao;
 import com.yenroc.ho.mapper.entity.AlbumInstance;
 import com.yenroc.ho.mapper.entity.AlbumTemplate;
 import com.yenroc.ho.mapper.entity.User;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,9 +97,7 @@ public class UserAlbumInfoServiceImpl implements UserAlbumInfoService {
                 boolean isDefault =false;
                 for (AlbumTemplateVo albumTemplateVo : albumTemplateVos) {
                     if (albumTemplateVo.getDefaultInstanceId().equals(albumInstance.getId())) {
-//                        albumTemplateVo.setViewPhotoUrl(albumInstance.getDefaultViewPhoto());
                         albumTemplateVo.setViewPhotoUrl(blogGlobalConfig.getPhotoViewUrl() + albumInstance.getDefaultViewPhoto());
-
                         isDefault = true;
                         break;
                     }
@@ -114,6 +113,8 @@ public class UserAlbumInfoServiceImpl implements UserAlbumInfoService {
                 publicAlbumVo.setAlbumDesc(albumInstance.getAlbumDesc());
                 publicAlbumVo.setAlbumStyleCss(albumInstance.getAlbumStyleCss());
                 publicAlbumVo.setDefaultViewPhoto(blogGlobalConfig.getPhotoViewUrl() + albumInstance.getDefaultViewPhoto());
+                publicAlbumVo.setDefaultViewPhoto(StringUtils.replace(publicAlbumVo.getDefaultViewPhoto(),"\\","/"));
+
                 User user1 = userDao.selectByPrimaryKey(albumInstance.getUserId());
                 publicAlbumVo.setUserName(user1.getUserName());
                 publicAlbumVo.setUserNickName(user1.getNickName());

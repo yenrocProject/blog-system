@@ -133,7 +133,7 @@
                     <div class="text-muted" id='words'>上传图片</div>
                     <div class="upload-wrap">
 
-                        <template  v-for="(imgItem, imgIndex) in imgTempList" > <!-- v-for="(imgItem, imgIndex) in imgTempList" -->
+                        <template  v-for="(imgItem, imgIndex) in tempPhotoList" > <!-- v-for="(imgItem, imgIndex) in tempPhotoList" -->
                             <div class="box">
                                 <label class="p dotted" v-if="imgItem.fileName == null">
                                     <input type="file" accept="image/jpg,image/jpeg,image/png" name="file"
@@ -150,7 +150,7 @@
                         </template>
                     </div>
                 </div>
-                <button class="l-btn" @click="onUploadImg">上传</button>
+<!--                <button class="l-btn" @click="onUploadImg">上传</button>-->
             </div>
         </div>
     </div>
@@ -158,7 +158,7 @@
 <script th:inline="javascript">
     var root_url = "";
     albumInfo = /*[[${albumInfo}]]*/ {};
-    tempList = albumInfo.albumPhotoVoList;
+    photoList = albumInfo.albumPhotoVoList;
     function submit() {
         var data={};
         var formArray = $('#albumForm').serializeArray();
@@ -166,7 +166,7 @@
             data[field.name] = field.value; //通过变量，将属性值，属性一起放到对象中
         });
         data['privateView'] =  $("[name='privateView']").prop('checked') ? 1:0;// 是否开放
-        data['albumPhotos'] = tempList;
+        data['albumPhotos'] = photoList;
         $.ajax({
             //几个参数需要注意一下
             type: "POST",//方法类型
@@ -190,7 +190,7 @@
     var app = new Vue({
         el: '#app',
         data: {
-            imgTempList: tempList, //图片临时路径列表
+            tempPhotoList: photoList, //图片临时路径列表
             isUploading: false //是否正在上传,在上传的时候遮罩
         },
         mounted: function () {
@@ -201,8 +201,6 @@
             //选择图片
             onChooseImage: function (event, idx) {
                 var that = this;
-                // var currentImgTempArray = that.imgTempList;
-
                 //使用FileReader对文件对象进行操作
                 var reader = new FileReader();
                 reader.readAsDataURL(event.target.files[0]); //将读取到的文件编码成Data URL
@@ -215,14 +213,41 @@
                         quality: 0.8,
                         success: function (src) {
                             //将压缩后的路径 追加到临时路径数组中
-                            that.imgTempList[idx].data = src;
-                            // var totalList = [];
-                            // if (currentImgTempArray.length > 0) {
-                            //     totalList = currentImgTempArray.concat(src);
-                            // } else {
-                            //     totalList[0] = src;
-                            // }
-                            // that.imgTempList = totalList;
+                            // that.tempPhotoList[idx].data = src;
+                            // 直接进行文件上传
+                            that.isUploading = true;
+                            var files = that.dataURLtoFile(src, 'pj' + Date.now() + '.jpg'); //压缩后的数据转成文件
+                            var formdata = new FormData();
+                            formdata.append('file', files);
+                            axios({
+                                method: "POST",
+                                url: root_url + "/api/file/upload", // 相册映射的照片id
+                                data: formdata,
+                                headers: {
+                                    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7YqBcDwUevoFodcf"
+                                }
+                            }).then(function (res) {
+                                if (res.data.responseCode === '200') {
+                                    that.tempPhotoList[idx].fileName = res.data.dataResult;
+                                    // 更新数据,否则在创建的时候更新
+                                    if (albumInfo.id != null) {
+                                        var photoInstance = that.tempPhotoList[idx];
+                                        // 调用接口更新相册实例
+                                        axios({
+                                            method: "POST",
+                                            url: root_url + "/api/album/photoUpdate", // 相册映射的照片id
+                                            data: JSON.stringify(photoInstance),
+                                            headers: { "Content-Type": "application/json;charset=utf-8" }
+                                        }).then(function (res) {
+                                            console.log("上传图片成功" + res);
+                                            that.tempPhotoList[idx].photoUrl = res.data.dataResult.photoUrl;
+                                        })
+                                    }
+                                }
+                                that.isUploading = false;
+                            }).catch(function (error) {
+                                console.error(error);
+                            });
                         }
                     });
                 };
@@ -231,59 +256,59 @@
             //删除某张图片
             deleteImg: function (idx) {
                 var that = this;
-                tempList[idx].fileId=null;
-                tempList[idx].fileName=null;
-                tempList[idx].photoUrl=null;
+                photoList[idx].fileId=null;
+                photoList[idx].fileName=null;
+                photoList[idx].photoUrl=null;
             },
 
             //提交上传图片
-            onUploadImg: function () {
-                var that = this;
-                var imgTempList = that.imgTempList;
-                if (imgTempList.length > 0) {
-                    that.isUploading = true; //正在上传 显示遮罩层 防止连续点击
-                    var countNum = 0; //计算数量用的 判断上传到第几张图片了
-                    //map循环遍历上传图片
-                    imgTempList.map(function (imgItem, imgIndex) {
-                        if (imgItem.data == null) {
-                            countNum++;
-                            console.log("文件不做上传");
-                            //图片全部上传完后去掉遮罩层
-                            if (countNum >= imgTempList.length) {
-                                that.isUploading = false;
-                            }
-                        } else {
-                            var files = that.dataURLtoFile(imgItem.data, 'pj' + Date.now() + '.jpg'); //DataURL转File
-                            //创FormData对象
-                            var formdata = new FormData();
-                            //append(key,value)在数据末尾追加数据。 这儿的key值需要和后台定义保持一致
-                            formdata.append('file', files);
-                            //用axios上传，
-                            axios({
-                                method: "POST",
-                                //url: "http://www.clluo.com:8060/uploadImg",
-                                url: root_url + "/api/file/upload", // 相册映射的照片id
-                                data: formdata,
-                                headers: {
-                                    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7YqBcDwUevoFodcf"
-                                }
-                            }).then(function (res) {
-                                if (res.data.responseCode === '200') {
-                                    imgTempList[imgIndex].fileName = res.data.dataResult;
-                                    imgTempList[imgIndex].data = null;
-                                }
-                                countNum++;
-                                //图片全部上传完后去掉遮罩层
-                                if (countNum >= imgTempList.length) {
-                                    that.isUploading = false;
-                                }
-                            }).catch(function (error) {
-                                console.error(error);
-                            });
-                        }
-                    });
-                }
-            },
+            // onUploadImg: function () {
+            //     var that = this;
+            //     var tempPhotoList = that.tempPhotoList;
+            //     if (tempPhotoList.length > 0) {
+            //         that.isUploading = true; //正在上传 显示遮罩层 防止连续点击
+            //         var countNum = 0; //计算数量用的 判断上传到第几张图片了
+            //         //map循环遍历上传图片
+            //         tempPhotoList.map(function (imgItem, imgIndex) {
+            //             if (imgItem.data == null) {
+            //                 countNum++;
+            //                 console.log("文件不做上传");
+            //                 //图片全部上传完后去掉遮罩层
+            //                 if (countNum >= tempPhotoList.length) {
+            //                     that.isUploading = false;
+            //                 }
+            //             } else {
+            //                 var files = that.dataURLtoFile(imgItem.data, 'pj' + Date.now() + '.jpg'); //DataURL转File
+            //                 //创FormData对象
+            //                 var formdata = new FormData();
+            //                 //append(key,value)在数据末尾追加数据。 这儿的key值需要和后台定义保持一致
+            //                 formdata.append('file', files);
+            //                 //用axios上传，
+            //                 axios({
+            //                     method: "POST",
+            //                     //url: "http://www.clluo.com:8060/uploadImg",
+            //                     url: root_url + "/api/file/upload", // 相册映射的照片id
+            //                     data: formdata,
+            //                     headers: {
+            //                         "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7YqBcDwUevoFodcf"
+            //                     }
+            //                 }).then(function (res) {
+            //                     if (res.data.responseCode === '200') {
+            //                         tempPhotoList[imgIndex].fileName = res.data.dataResult;
+            //                         tempPhotoList[imgIndex].data = null;
+            //                     }
+            //                     countNum++;
+            //                     //图片全部上传完后去掉遮罩层
+            //                     if (countNum >= tempPhotoList.length) {
+            //                         that.isUploading = false;
+            //                     }
+            //                 }).catch(function (error) {
+            //                     console.error(error);
+            //                 });
+            //             }
+            //         });
+            //     }
+            // },
 
             /**
              * 压缩图片处理
@@ -298,7 +323,6 @@
                     src: params.src || "",
                     quality: params.quality || 1
                 };
-                debugger
                 var image = new Image();
                 image.src = initParams.src;
                 image.onload = function () {
@@ -313,7 +337,6 @@
 
                     //将图片重新画入canvas中
                     var canvas = document.getElementById("compressCanvas");
-                    debugger
                     if(!canvas){ //如果没有压缩用的canvas 就创建一个canvas画布
                         var body = document.body;
                         canvas = document.createElement("canvas"); //创建canvas标签

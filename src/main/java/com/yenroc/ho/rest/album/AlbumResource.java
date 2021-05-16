@@ -2,6 +2,8 @@ package com.yenroc.ho.rest.album;
 
 import com.yenroc.ho.blogic.restDto.album.createOrUpdate.CreateOrUpdateAlbumReqt;
 import com.yenroc.ho.blogic.restDto.album.createOrUpdate.CreateOrUpdateAlbumResp;
+import com.yenroc.ho.blogic.restDto.album.photoUpdate.PhotoUpdateReqt;
+import com.yenroc.ho.blogic.restDto.album.photoUpdate.PhotoUpdateResp;
 import com.yenroc.ho.blogic.restDto.user.UserCreateAndLoginReqt;
 import com.yenroc.ho.blogic.restDto.user.UserCreateAndLoginResp;
 import com.yenroc.ho.common.bean.ResponseResult;
@@ -31,6 +33,10 @@ public class AlbumResource {
     @Qualifier("CreateOrUpdateAlbumBLogic")
     private BizLogic<CreateOrUpdateAlbumReqt, CreateOrUpdateAlbumResp> createOrUpdateAlbumBLogic;
 
+    @Autowired
+    @Qualifier("PhotoUpdateBLogic")
+    private BizLogic<PhotoUpdateReqt, PhotoUpdateResp> photoUpdateBLogic;
+
 
     @PostMapping("/albumUser/createAndLogin")
     @ApiOperation(value="创建用户或登录", notes="创建用户或登录")
@@ -48,4 +54,11 @@ public class AlbumResource {
         return new ResponseEntity<>(ResponseResult.success(execute), HttpStatus.OK);
     }
 
+    @PostMapping("/album/photoUpdate")
+    @ApiOperation(value="相册照片更新", notes="相册照片更新")
+    public ResponseEntity<ResponseResult> photoUpdate(@RequestBody PhotoUpdateReqt param) throws Exception {
+        log.info("REST 相册照片更新=[{}]", param);
+        PhotoUpdateResp execute = photoUpdateBLogic.execute(param);
+        return new ResponseEntity<>(ResponseResult.success(execute), HttpStatus.OK);
+    }
 }
