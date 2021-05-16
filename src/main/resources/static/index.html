@@ -18,14 +18,15 @@
 			alert("浏览器支持localstorage");
 			return false;
 		}else {
-			var storage=window.localStorage;
-			var userName = storage.userName;
+			var storage = window.localStorage;
+			userName = storage.userName;
 			if (userName == null) {
-				var pd;
-				do {
+				userName = prompt("请输入用户名","");
+				pd = prompt("请输入口令","");
+				if (userName == '' || pd == ''){
+					alert("请重新输入用户名密码--");
 					userName = prompt("请输入用户名","");
-					pd = prompt("请输入口令","");
-				} while (userName == "" || pd == "");
+				}
 				$.ajax({
 					type: 'POST',
 					url: "/api/albumUser/createAndLogin" ,
@@ -35,10 +36,10 @@
 					headers: { "Content-Type": "application/json;charset=utf-8" },
 					success: function(data){
 						if (data.responseCode == 200) {
-							storage["userName"]=userName;
+							storage["userName"] = userName;
 							window.location.href = userName+"/index.html";
 						} else {
-							alert("用户存在,输入的口令不正确,请刷新页面!");
+							alert(data.messageList[0].message);
 						}
 					}
 				})
