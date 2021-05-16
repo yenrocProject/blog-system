@@ -74,14 +74,11 @@ public class CreateOrUpdateAlbumBLogic implements BizLogic<CreateOrUpdateAlbumRe
                 for (CreateOrUpdateAlbumReqtM01 albumPhoto : albumPhotos) {
                     AlbumPhotoInstance albumPhotoInstance = new AlbumPhotoInstance();
                     albumPhotoInstance.setAlbumInstanceId(albumId);
-                    // 表示新上传的文件
-                    if (albumPhoto.getId() == null) {
-                        albumPhotoInstance.setFileId(fileInfoDao.findByFileName(albumPhoto.getFileName()).getId());
-                    }
                     // 取第一个照片作为该相册的默认显示照片
                     if (StringUtils.isBlank(defaultViewPhotoUrl) && albumPhotoInstance.getFileId() != null){
                         defaultViewPhotoUrl = fileInfoDao.selectByPrimaryKey(albumPhotoInstance.getFileId()).getFileFullPath();
                     }
+                    albumPhotoInstance.setFileId(albumPhoto.getFileId());
                     albumPhotoInstance.setTemplateId(arg0.getAlbumTemplateId());
                     albumPhotoInstance.setUserId(arg0.getUserId());
                     if (albumPhoto.getId() == null) {

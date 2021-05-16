@@ -45,18 +45,22 @@ public class PhotoUpdateBLogic implements BizLogic<PhotoUpdateReqt, PhotoUpdateR
     @Override
     public PhotoUpdateResp execute(PhotoUpdateReqt arg0) throws Exception {
         PhotoUpdateResp result = new PhotoUpdateResp();
-        // 新增
-        Integer id = arg0.getId();
-        AlbumPhotoInstance albumPhotoInstance = albumPhotoInstanceDao.selectByPrimaryKey(id);
+
         // 根据文件,获取文件的id
         FileInfo fileInfo = fileInfoDao.findByFileName(arg0.getFileName());
         if (fileInfo != null) {
-            albumPhotoInstance.setFileId(fileInfo.getId());
-            log.info("照片实例=[{}]将照片设置为=[{}]", id, fileInfo.getId());
             String photoUrl = blogGlobalConfig.getPhotoViewUrl() + fileInfo.getFileFullPath();
             result.setPhotoUrl(StringUtils.replace(photoUrl,"\\","/"));
+            result.setFileId(fileInfo.getId());
         }
-        albumPhotoInstanceDao.updateByPrimaryKey(albumPhotoInstance);
+        Integer id = arg0.getId();
+        if (null != id) {
+            AlbumPhotoInstance albumPhotoInstance = albumPhotoInstanceDao.selectByPrimaryKey(id);
+            if (fileInfo != null) {
+                albumPhotoInstance.setFileId(fileInfo.getId());
+            }
+            albumPhotoInstanceDao.updateByPrimaryKey(albumPhotoInstance);
+        }
         return result;
     }
 }

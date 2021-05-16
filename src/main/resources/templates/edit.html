@@ -229,20 +229,18 @@
                             }).then(function (res) {
                                 if (res.data.responseCode === '200') {
                                     that.tempPhotoList[idx].fileName = res.data.dataResult;
-                                    // 更新数据,否则在创建的时候更新
-                                    if (albumInfo.id != null) {
-                                        var photoInstance = that.tempPhotoList[idx];
-                                        // 调用接口更新相册实例
-                                        axios({
-                                            method: "POST",
-                                            url: root_url + "/api/album/photoUpdate", // 相册映射的照片id
-                                            data: JSON.stringify(photoInstance),
-                                            headers: { "Content-Type": "application/json;charset=utf-8" }
-                                        }).then(function (res) {
-                                            console.log("上传图片成功" + res);
-                                            that.tempPhotoList[idx].photoUrl = res.data.dataResult.photoUrl;
-                                        })
-                                    }
+                                    var photoInstance = that.tempPhotoList[idx];
+                                    // 调用接口更新相册实例
+                                    axios({
+                                        method: "POST",
+                                        url: root_url + "/api/album/photoUpdate", // 相册映射的照片id
+                                        data: JSON.stringify(photoInstance),
+                                        headers: { "Content-Type": "application/json;charset=utf-8" }
+                                    }).then(function (res) {
+                                        console.log("上传图片成功" + res);
+                                        that.tempPhotoList[idx].photoUrl = res.data.dataResult.photoUrl;
+                                        that.tempPhotoList[idx].fileId =res.data.dataResult.fileId;
+                                    })
                                 }
                                 that.isUploading = false;
                             }).catch(function (error) {
