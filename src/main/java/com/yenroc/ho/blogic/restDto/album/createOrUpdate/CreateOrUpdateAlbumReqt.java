@@ -24,6 +24,10 @@ public class CreateOrUpdateAlbumReqt implements Serializable {
 
     private Integer userId;
 
+    private Integer musicId;
+
+    private Integer musicName;
+
     private List<CreateOrUpdateAlbumReqtM01> albumPhotos;
 
 }

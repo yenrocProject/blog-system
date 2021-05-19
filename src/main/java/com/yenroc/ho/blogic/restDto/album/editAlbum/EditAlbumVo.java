@@ -30,6 +30,10 @@ public class EditAlbumVo  implements Serializable {
 
     private String defaultViewPhoto;
 
+    private Integer musicId;
+
+    private String musicName;
+
     // 照片实例
     private List<EditAlbumPhotoVo> albumPhotoVoList;
 

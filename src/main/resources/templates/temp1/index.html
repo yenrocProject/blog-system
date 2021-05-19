@@ -434,7 +434,8 @@
         </label>
     </div>
     <div class="m-main"  style="display:none;">
-		<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86 src="https://music.163.com/outchain/player?type=2&id=1415430342&auto=1&height=66"></iframe>
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=100% height=86
+                th:src="@{https://music.163.com/outchain/player?type=2&id={musicId}&auto=1&height=66(musicId=${album.musicId})}"></iframe>
 	</div>
     <div style="position: absolute; top: 20px; right: 20px;">
         <style type="text/css">

@@ -40,6 +40,12 @@ public class AlbumInstance extends SqlInputBaseDto implements Serializable {
     @Column(name = "default_view_photo")
     private String defaultViewPhoto;
 
+    @Column(name = "music_id")
+    private Integer musicId;
+
+    @Column(name = "music_name")
+    private String musicName;
+
     public Integer getId() {
         return id;
     }
@@ -110,5 +116,21 @@ public class AlbumInstance extends SqlInputBaseDto implements Serializable {
 
     public void setDefaultViewPhoto(String defaultViewPhoto) {
         this.defaultViewPhoto = defaultViewPhoto;
+    }
+
+    public Integer getMusicId() {
+        return musicId;
+    }
+
+    public void setMusicId(Integer musicId) {
+        this.musicId = musicId;
+    }
+
+    public String getMusicName() {
+        return musicName;
+    }
+
+    public void setMusicName(String musicName) {
+        this.musicName = musicName;
     }
 }

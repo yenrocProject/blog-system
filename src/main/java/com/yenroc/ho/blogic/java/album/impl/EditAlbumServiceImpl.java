@@ -157,6 +157,8 @@ public class EditAlbumServiceImpl implements EditAlbumService {
         editAlbumVo.setTemplatePhotoSize(albumTemplate.getTemplatePhotoSize());
         editAlbumVo.setAlbumStyleCss(albumInstance.getAlbumStyleCss());
         editAlbumVo.setDefaultViewPhoto(albumInstance.getDefaultViewPhoto());
+        editAlbumVo.setMusicId(albumInstance.getMusicId());
+        editAlbumVo.setMusicName(albumInstance.getMusicName());
         // 加载 用户得照片信息
         List<AlbumPhotoInfo> albumPhotoInfoList = albumPhotoInstanceDao.getPhotoInfoByAlbumId(albumInstance.getId());
 
