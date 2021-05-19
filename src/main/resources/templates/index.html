@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:method="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>定制属于 <span> magic </span> 的个性相册</title>
+    <title th:text="${userName} + 个性相册"></title>
 
     <script src="/base/js/prefixfree.min.js"></script>
     <script src="/base/js/modernizr.js"></script>
@@ -58,18 +58,22 @@
             border: none;
             padding: 16px 36px;
             font-weight: normal;
-            border-radius: 3px;
+            border-radius: 10px;
             transition: all 0.25s ease;
-            box-shadow: 0 38px 32px -23px black;
+            box-shadow: 15px 12px 12px -12px black;
             margin: 0 1em 1em;
             background-color: Transparent;
-
+            display: inline-block;
+            font-size: 18px;
         }
         .sparkley:hover {
             background: #2c3e50;
             color: rgba(155, 155, 155, 0.5);
             background-repeat:no-repeat;
             background-color: Transparent;
+        }
+        a:hover {
+            text-decoration:none
         }
     </style>
     <script>
@@ -93,7 +97,7 @@
     <div class="row">
         <div class="col-sm-3" th:each="albumTemplate:${albumTemplates}">
             <!-- normal -->
-            <div th:class= "${albumTemplate.templateStyleCss}">
+            <div th:class= "${albumTemplate.templateStyleCss}" style="margin: auto">
                 <a th:href="@{/preview/{templateId}.html(templateId=${albumTemplate.templateId})}">
                     <div class="img"><img th:src="${albumTemplate.viewPhotoUrl}" alt="img"></div>
                     <div class="info">
@@ -115,7 +119,7 @@
     <div class="row">
         <div class="col-sm-4" th:each="userAlbum:${userAlbums}">
             <!-- normal -->
-            <div th:class= "${userAlbum.albumStyleCss}">
+            <div th:class= "${userAlbum.albumStyleCss}" style="margin: auto">
                 <a th:href="@{/{userName}/{templateId}/{userAlbumId}.html?album_key={privateKey}(userName=${userName},templateId=${userAlbum.templateId},userAlbumId=${userAlbum.userAlbumId},privateKey=${userAlbum.privateKey})}">
                     <div class="img"><img th:src="${userAlbum.defaultViewPhoto}" alt="img"></div>
                     <div class="info">
@@ -134,9 +138,9 @@
 <h1 style="margin: 60px auto 30px;position:relative">猜你喜欢</h1>
 <div class="bs-example">
     <div class="row">
-        <div class="col-sm-4" th:each="publicAlbum:${publicAlbums}">
+        <div class="col-sm-4" style="text-align: center" th:each="publicAlbum:${publicAlbums}">
             <!-- normal -->
-            <div th:class= "${publicAlbum.albumStyleCss}">
+            <div th:class= "${publicAlbum.albumStyleCss}" style="margin: auto">
                 <a th:href="@{/{userName}/{templateId}/{userAlbumId}.html(userName=${publicAlbum.userName},templateId=${publicAlbum.templateId},userAlbumId=${publicAlbum.albumId})}">
                     <div class="img"><img th:src="${publicAlbum.defaultViewPhoto}" alt="img"></div>
                     <div class="info">

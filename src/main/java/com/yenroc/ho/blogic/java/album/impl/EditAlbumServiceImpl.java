@@ -58,7 +58,7 @@ public class EditAlbumServiceImpl implements EditAlbumService {
      */
     public ModelAndView editAlbum(String userName, Integer templateId) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         ModelAndView mv = new ModelAndView();
-        mv.addObject("userName", "defalut");
+        mv.addObject("userName", userName);
         EditAlbumVo editAlbumVo = new EditAlbumVo();
 
         List<User> users = userDao.finByUserName(userName);

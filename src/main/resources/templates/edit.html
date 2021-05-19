@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:method="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>定制属于 <span> magic </span> 的个性相册</title>
+    <title th:text="${userName} + 个性相册"></title>
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=2" />-->
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/layui/2.5.6/layui.all.js"></script>
@@ -19,10 +19,7 @@
     <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/base/css/upload-img.css">
 
-
-
     <style>
-
         html {
             font-family: Lato;
             font-weight: 200;
@@ -62,30 +59,9 @@
             display: inline-block;
             margin: 10px auto;
         }
-
-        .sparkley {
-            color: rgba(22, 22, 22, 1);
-            border: none;
-            padding: 16px 36px;
-            font-weight: normal;
-            border-radius: 3px;
-            transition: all 0.25s ease;
-            box-shadow: 0 38px 32px -23px black;
-            margin: 0 1em 1em;
-            background-color: Transparent;
-
-        }
-        .sparkley:hover {
-            background: #2c3e50;
-            color: rgba(155, 155, 155, 0.5);
-            background-repeat:no-repeat;
-            background-color: Transparent;
-        }
     </style>
-
 </head>
 <body>
-
 
 <div class="container-fluid">
     <h1>制作属于 <span th:text="${userName}"></span> 的个性相册!</h1>
@@ -123,6 +99,13 @@
                                 th:text="${albumStyleCss.optionName}"></option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label>设置相册背景音乐:</label>
+                    <input class="form-control" list="musicOptions" name="musicId" id="musicInput">
+                    <datalist id="musicOptions">
+                    </datalist>
+                </div>
+
             </form>
             <button type="button" onclick="submit()" class="btn btn-primary">Submit</button>
         </div>
@@ -134,7 +117,7 @@
                     <div class="upload-wrap">
 
                         <template  v-for="(imgItem, imgIndex) in tempPhotoList" > <!-- v-for="(imgItem, imgIndex) in tempPhotoList" -->
-                            <div class="box">
+                            <div class="box" style="width: 20%">
                                 <label class="p dotted" v-if="imgItem.fileName == null">
                                     <input type="file" accept="image/jpg,image/jpeg,image/png" name="file"
                                            @change="onChooseImage($event, imgIndex)"/>
@@ -186,14 +169,43 @@
         });
     }
 
+    $("#musicInput").bind('input propertychange',function(){
+        axios({
+            method: "GET",
+            url: root_url + "/api/music163/queryMusicName?musicName=江南"
+        }).then(function (result) {
+            var res = result.data;
+            console.log(res);
+            debugger
+            if (res.responseCode == '200') {
+                var songs = res.dataResult.result.songs;
+                for (var i = 0; i < songs.length; i++) {
+                    var item = songs[i];
+                    $("#musicOptions").append('<option label="' + item.name + '" value="' + item.id + '"></option>');
+                    debugger
+                }
+            }
+
+        });
+    });
+    function debounce(method,delay){
+        var timer = null;
+        return function(){
+            var context = this,args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function(){
+                method.apply(context,args);
+            },delay);
+        }
+    }
+
+
     var app = new Vue({
         el: '#app',
         data: {
             tempPhotoList: photoList, //图片临时路径列表
             isUploading: false //是否正在上传,在上传的时候遮罩
-        },
-        mounted: function () {
-            var that = this;
+
         },
         watch: {},
         methods: {
@@ -257,55 +269,6 @@
                 photoList[idx].fileName=null;
                 photoList[idx].photoUrl=null;
             },
-
-            //提交上传图片
-            // onUploadImg: function () {
-            //     var that = this;
-            //     var tempPhotoList = that.tempPhotoList;
-            //     if (tempPhotoList.length > 0) {
-            //         that.isUploading = true; //正在上传 显示遮罩层 防止连续点击
-            //         var countNum = 0; //计算数量用的 判断上传到第几张图片了
-            //         //map循环遍历上传图片
-            //         tempPhotoList.map(function (imgItem, imgIndex) {
-            //             if (imgItem.data == null) {
-            //                 countNum++;
-            //                 console.log("文件不做上传");
-            //                 //图片全部上传完后去掉遮罩层
-            //                 if (countNum >= tempPhotoList.length) {
-            //                     that.isUploading = false;
-            //                 }
-            //             } else {
-            //                 var files = that.dataURLtoFile(imgItem.data, 'pj' + Date.now() + '.jpg'); //DataURL转File
-            //                 //创FormData对象
-            //                 var formdata = new FormData();
-            //                 //append(key,value)在数据末尾追加数据。 这儿的key值需要和后台定义保持一致
-            //                 formdata.append('file', files);
-            //                 //用axios上传，
-            //                 axios({
-            //                     method: "POST",
-            //                     //url: "http://www.clluo.com:8060/uploadImg",
-            //                     url: root_url + "/api/file/upload", // 相册映射的照片id
-            //                     data: formdata,
-            //                     headers: {
-            //                         "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundary7YqBcDwUevoFodcf"
-            //                     }
-            //                 }).then(function (res) {
-            //                     if (res.data.responseCode === '200') {
-            //                         tempPhotoList[imgIndex].fileName = res.data.dataResult;
-            //                         tempPhotoList[imgIndex].data = null;
-            //                     }
-            //                     countNum++;
-            //                     //图片全部上传完后去掉遮罩层
-            //                     if (countNum >= tempPhotoList.length) {
-            //                         that.isUploading = false;
-            //                     }
-            //                 }).catch(function (error) {
-            //                     console.error(error);
-            //                 });
-            //             }
-            //         });
-            //     }
-            // },
 
             /**
              * 压缩图片处理
