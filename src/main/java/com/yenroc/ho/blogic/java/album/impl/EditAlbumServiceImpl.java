@@ -122,7 +122,7 @@ public class EditAlbumServiceImpl implements EditAlbumService {
      */
     public ModelAndView editAlbum(String userName, Integer templateId, Integer albumId) throws IllegalAccessException, ClassNotFoundException, InstantiationException {
         ModelAndView mv = new ModelAndView();
-        mv.addObject("userName", "defalut");
+        mv.addObject("userName", userName);
         List<User> users = userDao.finByUserName(userName);
         if (users.size() == 0) {
             mv.addObject("errorMsg","用户信息账号不存在,请先创建账号~~");
