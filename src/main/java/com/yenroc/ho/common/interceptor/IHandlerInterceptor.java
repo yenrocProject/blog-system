@@ -27,7 +27,6 @@ public class IHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("request请求地址path=[{}],uri=[{}]", request.getServletPath(), request.getRequestURI());
         if (!StringUtils.isEmpty(request.getHeader(CommonConsts.THREAD_ID))) {
             BLogContext.setValue(CommonConsts.THREAD_ID, request.getHeader(CommonConsts.THREAD_ID));
             Thread.currentThread().setName(request.getHeader(CommonConsts.THREAD_ID));
@@ -39,6 +38,7 @@ public class IHandlerInterceptor implements HandlerInterceptor {
                 Thread.currentThread().setName(logId);
             }
         }
+        log.info("request请求地址path=[{}],uri=[{}]", request.getServletPath(), request.getRequestURI());
         // 从request里获取分页信息与order信息, 获取的顺序为header,parameter
         // 只要从header或parameter里面获取到pageIndex，pageSize，orderBy任意一个值，则创建PageControllerInfo，否则不设定值
         if(StringUtils.isEmpty(request.getHeader(CommonConsts.PAGE_INDEX))

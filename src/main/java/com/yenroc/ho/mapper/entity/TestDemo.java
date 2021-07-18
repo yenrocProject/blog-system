@@ -3,13 +3,10 @@ package com.yenroc.ho.mapper.entity;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Objects;
 
-
-@Table(name="demo")
-public class Demo extends BaseEntity implements Serializable {
+@Table(name="test_demo")
+public class TestDemo extends BaseEntity{
 
     private static final long serialVersionUID = -7245386871063697240L;
 
@@ -31,19 +28,6 @@ public class Demo extends BaseEntity implements Serializable {
      */
     @Column(name = "age")
     private Integer age;
-
-    /**
-     * 工资
-     */
-    @Column(name = "salary")
-    private BigDecimal salary;
-
-    /**
-     * 出生日期
-     */
-    @Column(name = "birthDay")
-    private Date birthDay;
-
 
     public String getId() {
         return id;
@@ -69,21 +53,28 @@ public class Demo extends BaseEntity implements Serializable {
         this.age = age;
     }
 
-    public BigDecimal getSalary() {
-        return salary;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TestDemo testDemo = (TestDemo) o;
+        return Objects.equals(id, testDemo.id) &&
+                Objects.equals(name, testDemo.name) &&
+                Objects.equals(age, testDemo.age);
     }
 
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, name, age);
     }
 
-    public Date getBirthDay() {
-        return birthDay;
+    @Override
+    public String toString() {
+        return "TestDemo{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                '}';
     }
-
-    public void setBirthDay(Date birthDay) {
-        this.birthDay = birthDay;
-    }
-
-
 }

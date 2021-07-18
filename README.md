@@ -14,3 +14,5 @@ springboot项目的模板
 	+  分支dev_kafka kafka
 	+  分支dev_file 文件
 	+ 
+
+基于TK Mybatis 实现开放是api,提供单表的增删改查统一操作.

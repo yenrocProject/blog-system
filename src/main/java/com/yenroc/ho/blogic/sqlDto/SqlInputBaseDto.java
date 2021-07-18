@@ -11,13 +11,30 @@ import java.util.Objects;
 public class SqlInputBaseDto implements Serializable {
 
     private static final long serialVersionUID = -6012929095434378823L;
-    private String createdBy = "default";// SecurityUtils.getCurrentUserLogin();
-    private Date createdDate = DateUtil.getCurDate();
-    private String lastModifiedBy = "default";//SecurityUtils.getCurrentUserLogin();
-    private Date lastModifiedDate = DateUtil.getCurDate();
+    private String createdBy;// SecurityUtils.getCurrentUserLogin();
+    private Date createdDate;
+    private String lastModifiedBy;//SecurityUtils.getCurrentUserLogin();
+    private Date lastModifiedDate;
     private Byte isDel = 0;
 
     public SqlInputBaseDto() {
+    }
+
+    public void initInsert(){
+        this.createdBy = "default";// SecurityUtils.getCurrentUserLogin();
+        createdDate = DateUtil.getCurDate();
+        lastModifiedBy = "default";//SecurityUtils.getCurrentUserLogin();
+        lastModifiedDate = DateUtil.getCurDate();
+    }
+
+    public void initUpdate(){
+        lastModifiedBy = "default";//SecurityUtils.getCurrentUserLogin();
+        lastModifiedDate = DateUtil.getCurDate();
+    }
+
+    public void initDelete(){
+        lastModifiedBy = "default";//SecurityUtils.getCurrentUserLogin();
+        lastModifiedDate = DateUtil.getCurDate();
     }
 
     public String getCreatedBy() {

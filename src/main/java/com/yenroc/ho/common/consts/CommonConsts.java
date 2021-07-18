@@ -29,4 +29,16 @@ public class CommonConsts {
     public static String ACCEPT_LANGUAGE = "Accept_Language";
 
     public static String THREAD_ID = "THREAD_ID";
+
+    public static class RedisKeyConsts {
+
+        // 1小时,单位s
+        public static long expireTime_hours = 60 * 60;
+
+        // [单数据] TableData:表:id
+        public static String table_data_key = "TableData:%s:%s";
+
+
+    }
 }
+
