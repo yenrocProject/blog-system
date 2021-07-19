@@ -3,20 +3,25 @@ package com.yenroc.ho.runner;
 import com.yenroc.ho.common.context.SpringContextHolder;
 import com.yenroc.ho.mapper.sys.SysTableConfigDao;
 import com.yenroc.ho.utils.compiler.JavaStringCompiler;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.mapper.MapperFactoryBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.support.GenericBeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.support.*;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.*;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.FileSystemResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.common.BaseMapper;
 
@@ -35,43 +40,118 @@ import java.util.Map;
  */
 @Component
 @Order(value=1)
-public class InitMapperRunner implements ApplicationRunner {
+public class InitMapperRunner extends ClassPathScanningCandidateComponentProvider implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(InitMapperRunner.class);
 
     @Autowired
     DefaultListableBeanFactory defaultListableBeanFactory;
 
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
+
+    private ScopeMetadataResolver scopeMetadataResolver = new AnnotationScopeMetadataResolver();
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("开始初始化动态Mapper接口。。");
-//        BaseMapper sysTableConfigDao = SpringContextHolder.getBean("sysTableConfigDao");
-//        System.out.println("result = " + sysTableConfigDao.selectAll());
-
-
         JavaStringCompiler compiler = new JavaStringCompiler();
-//        Map<String, byte[]> entityResults = compiler.compile("DelDataEntity.java", JAVA_ENTITY_CODE);
-//        FileOutputStream fos = new FileOutputStream("E:\\yenroc\\Desktop\\DelDataEntity.class");
-//        byte[] bytes = entityResults.get("com.yenroc.ho.mapper.sys.entity.DelDataEntity");
-//        fos.write(bytes,0,bytes.length);
-//        fos.close();
-//        Class<?> entityClazz = compiler.loadClass("com.yenroc.ho.mapper.sys.entity.DelDataEntity", entityResults);
-
         Map<String, byte[]> results = compiler.compile("TestDemoDao.java", JAVA_SOURCE_CODE2);
         Class<?> clazz = compiler.loadClass("com.yenroc.ho.mapper.TestDemoDao", results);
+        FileOutputStream fos = new FileOutputStream("D:\\iProject\\iGithub\\blog-system\\target\\classes\\com\\yenroc\\ho\\mapper\\TestDemoDao.class");
+        byte[] bytes = results.get("com.yenroc.ho.mapper.TestDemoDao");
+        fos.write(bytes,0,bytes.length);
+        fos.close();
 
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
-        GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
-        definition.setScope("singleton");
-        definition.getConstructorArgumentValues().addGenericArgumentValue(clazz);
+        Resource resource = new FileSystemResourceLoader().getResource("D:\\iProject\\iGithub\\blog-system\\target\\classes\\com\\yenroc\\ho\\mapper\\TestDemoDao.class");
+        MetadataReader metadataReader =
+                this.getMetadataReaderFactory().getMetadataReader(resource);
+        ScannedGenericBeanDefinition sbd = new ScannedGenericBeanDefinition(metadataReader);
+        sbd.setResource(resource);
+        sbd.setSource(resource);
+        sbd.setScope("singleton");
+        AnnotationConfigUtils.processCommonDefinitionAnnotations(sbd);
+        BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(sbd, "testDemoDao");
+
+        GenericBeanDefinition definition = (GenericBeanDefinition)definitionHolder.getBeanDefinition();
+        definition.getConstructorArgumentValues().addGenericArgumentValue(definition.getBeanClassName());
         definition.setBeanClass(MapperFactoryBean.class);
-        definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
-        defaultListableBeanFactory.registerBeanDefinition("testDemoDao", definition);
+        definition.getPropertyValues().add("addToConfig", true);
+        definition.getPropertyValues().add("sqlSessionFactory", this.sqlSessionFactory);
+        BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, defaultListableBeanFactory);
 
-        BaseMapper testDemoDao = SpringContextHolder.getBean("testDemoDao");
-        System.out.println("result = " + testDemoDao.selectAll());
+
 
     }
+//    @Override
+//    public void run(ApplicationArguments args) throws Exception {
+//        log.info("开始初始化动态Mapper接口。。");
+////        BaseMapper sysTableConfigDao = SpringContextHolder.getBean("sysTableConfigDao");
+////        System.out.println("result = " + sysTableConfigDao.selectAll());
+//
+//
+//        JavaStringCompiler compiler = new JavaStringCompiler();
+////        Map<String, byte[]> entityResults = compiler.compile("DelDataEntity.java", JAVA_ENTITY_CODE);
+////        FileOutputStream fos = new FileOutputStream("E:\\yenroc\\Desktop\\DelDataEntity.class");
+////        byte[] bytes = entityResults.get("com.yenroc.ho.mapper.sys.entity.DelDataEntity");
+////        fos.write(bytes,0,bytes.length);
+////        fos.close();
+////        Class<?> entityClazz = compiler.loadClass("com.yenroc.ho.mapper.sys.entity.DelDataEntity", entityResults);
+//
+//
+//        Map<String, byte[]> results = compiler.compile("TestDemoDao.java", JAVA_SOURCE_CODE2);
+//        Class<?> clazz = compiler.loadClass("com.yenroc.ho.mapper.TestDemoDao", results);
+//
+//
+//        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
+//        builder.addPropertyValue("annotationClass", Mapper.class);
+//        builder.addPropertyValue("processPropertyPlaceHolders", true);
+//
+//        GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
+//        String beanClassName = definition.getBeanClassName();
+//
+//        // the mapper interface is the original class of the bean
+//        // but, the actual class of the bean is MapperFactoryBean
+//        definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); // issue #59
+//        //将Bean的定义信息修改为  MapperFactoryBean.class
+//        definition.setBeanClass(MapperFactoryBean.class);
+//
+////        definition.getPropertyValues().add("addToConfig", this.addToConfig);
+////
+////        boolean explicitFactoryUsed = false;
+////        if (StringUtils.hasText(this.sqlSessionFactoryBeanName)) {
+////            definition.getPropertyValues().add("sqlSessionFactory",
+////                    new RuntimeBeanReference(this.sqlSessionFactoryBeanName));
+////            explicitFactoryUsed = true;
+////        } else if (this.sqlSessionFactory != null) {
+////            definition.getPropertyValues().add("sqlSessionFactory", this.sqlSessionFactory);
+////            explicitFactoryUsed = true;
+////        }
+////
+////        if (StringUtils.hasText(this.sqlSessionTemplateBeanName)) {
+////            definition.getPropertyValues().add("sqlSessionTemplate",
+////                    new RuntimeBeanReference(this.sqlSessionTemplateBeanName));
+////            explicitFactoryUsed = true;
+////        } else if (this.sqlSessionTemplate != null) {
+////            definition.getPropertyValues().add("sqlSessionTemplate", this.sqlSessionTemplate);
+////            explicitFactoryUsed = true;
+////        }
+////
+////        if (!explicitFactoryUsed) {
+////            definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+////        }
+////        definition.setLazyInit(lazyInitialization);
+//
+////        definition.getPropertyValues().add("sqlSessionFactory", SpringContextHolder.getBean("sqlSessionFactory"));
+////        defaultListableBeanFactory.registerBeanDefinition("testDemoDao", definition);
+//
+//        BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder( definition,"testDemoDao");
+//        BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, defaultListableBeanFactory);
+//
+//        BaseMapper testDemoDao = SpringContextHolder.getBean("testDemoDao");
+//        System.out.println("result = " + testDemoDao.selectAll());
+//
+//    }
 
     private static String JAVA_SOURCE_CODE2 = "package com.yenroc.ho.mapper;\n" +
             "\n" +
