@@ -109,11 +109,6 @@
 			<artifactId>mapper-spring-boot-starter</artifactId>
 			<version>1.1.4</version>
 		</dependency>
-        <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper</artifactId>
-            <version>4.0.0</version>
-        </dependency>
 
 		<dependency>
 			<groupId>io.springfox</groupId>

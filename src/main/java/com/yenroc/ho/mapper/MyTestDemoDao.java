@@ -1,10 +1,10 @@
 package com.yenroc.ho.mapper;
 
-import com.yenroc.ho.mapper.entity.DelData;
+import com.yenroc.ho.mapper.entity.TestDemo;
 import org.apache.ibatis.annotations.Mapper;
 import tk.mybatis.mapper.common.BaseMapper;
 
 @Mapper
-public interface DelDataDao extends BaseMapper<DelData> {
+public interface MyTestDemoDao extends BaseMapper<TestDemo> {
 
 }

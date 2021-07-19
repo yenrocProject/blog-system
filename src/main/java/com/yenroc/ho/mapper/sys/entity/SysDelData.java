@@ -1,4 +1,6 @@
-package com.yenroc.ho.mapper.entity;
+package com.yenroc.ho.mapper.sys.entity;
+
+import com.yenroc.ho.mapper.entity.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -6,8 +8,8 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Table(name="del_data")
-public class DelData extends BaseEntity implements Serializable {
+@Table(name = "sys_del_data")
+public class SysDelData extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -7245386871063697240L;
 
@@ -53,7 +55,7 @@ public class DelData extends BaseEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        DelData delData = (DelData) o;
+        SysDelData delData = (SysDelData) o;
         return Objects.equals(id, delData.id) &&
                 Objects.equals(tableName, delData.tableName) &&
                 Objects.equals(dataInfo, delData.dataInfo);

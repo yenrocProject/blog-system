@@ -10,9 +10,9 @@ import com.yenroc.ho.common.consts.CommonConsts;
 import com.yenroc.ho.common.context.BLogContext;
 import com.yenroc.ho.common.context.SpringContextHolder;
 import com.yenroc.ho.common.service.RedisService;
-import com.yenroc.ho.mapper.DelDataDao;
+import com.yenroc.ho.mapper.sys.SysDelDataDao;
 import com.yenroc.ho.mapper.entity.BaseEntity;
-import com.yenroc.ho.mapper.entity.DelData;
+import com.yenroc.ho.mapper.sys.entity.SysDelData;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
     private RedisService redisService;
 
     @Autowired
-    private DelDataDao delDataDao;
+    private SysDelDataDao sysDelDataDao;
 
     public <T> List<T> select(String tableName, Map<String, Object> params) throws Exception {
         String tableEntityPath = checkTableName(tableName);
@@ -140,12 +140,12 @@ public class CommonServiceImpl extends AbstractCommonService implements CommonSe
         int result = mapper.updateByPrimaryKeySelective(oDel);
 
         // 将删除的数据保存起来
-        DelData delData = new DelData();
+        SysDelData delData = new SysDelData();
         delData.initInsert();
         delData.setId(oid.toString());
         delData.setTableName(tableName);
         delData.setDataInfo(objectMapper.writeValueAsString(o));
-        delDataDao.insert(delData);
+        sysDelDataDao.insert(delData);
 
         String redisKey = String.format(CommonConsts.RedisKeyConsts.table_data_key, tableName, oid);
         log.info("从redis移除key=[{}]的数据", redisKey);
