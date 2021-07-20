@@ -1,12 +1,14 @@
-package com.yenroc.ho.mapper.entity;
+package com.yenroc.ho.mapper.dynamic.entity;
+
+import com.yenroc.ho.mapper.entity.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-@Table(name="test_demo1")
-public class TestDemo extends BaseEntity{
+@Table(name="test_demo")
+public class TestDemo extends BaseEntity {
 
     private static final long serialVersionUID = -7245386871063697240L;
 
