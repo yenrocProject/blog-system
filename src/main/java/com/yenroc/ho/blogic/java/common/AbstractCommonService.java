@@ -2,12 +2,14 @@ package com.yenroc.ho.blogic.java.common;
 
 import com.yenroc.ho.common.bean.SystemMessage;
 import com.yenroc.ho.common.exception.BizLogicException;
+import com.yenroc.ho.utils.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -36,7 +38,7 @@ public class AbstractCommonService implements CommonService {
             throw new BizLogicException(new SystemMessage("ERROR", String.format("调用接口=[%s]异常", tableName)));
         }
         // 解析tableName, 将首字母转大写
-        tableName = captureName(tableName);
+        tableName = StringUtil.firstCharToUpperCase(tableName);
 
         if (tableNameMap.containsKey(tableName)) {
             return tableNameMap.get(tableName);
@@ -72,15 +74,5 @@ public class AbstractCommonService implements CommonService {
         return 0;
     }
 
-    /**
-     * 将字符串的首字母转大写
-     * @param str 需要转换的字符串
-     * @return 首字母大写
-     */
-    private static String captureName(String str) {
-        // 进行字母的ascii编码前移，效率要高于截取字符串进行转换的操作
-        char[] cs=str.toCharArray();
-        cs[0]-=32;
-        return String.valueOf(cs);
-    }
+
 }

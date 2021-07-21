@@ -3,17 +3,13 @@ package com.yenroc.ho;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import com.yenroc.ho.common.context.SpringContextHolder;
-import com.yenroc.ho.runner.MyMapperAutoConfiguredMyBatisRegistrar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication
-@Import(MyMapperAutoConfiguredMyBatisRegistrar.class)
 public class App {
 
     private static final Logger log = LoggerFactory.getLogger(App.class);
@@ -38,7 +34,5 @@ public class App {
                 "\n----------------------------------------------------------\n\t"
                         + "Config Server: \t{}\n----------------------------------------------------------",
                 configServerStatus == null ? "Not found or not setup for this application" : configServerStatus);
-
-        System.out.println("TestDemoDao=" + SpringContextHolder.getBean("testDemoDao"));
     }
 }
