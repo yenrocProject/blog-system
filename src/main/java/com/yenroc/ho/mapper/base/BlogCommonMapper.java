@@ -1,4 +1,4 @@
-package com.yenroc.ho.mapper;
+package com.yenroc.ho.mapper.base;
 
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;

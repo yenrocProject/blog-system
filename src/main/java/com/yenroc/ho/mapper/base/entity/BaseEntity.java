@@ -1,4 +1,4 @@
-package com.yenroc.ho.mapper.entity;
+package com.yenroc.ho.mapper.base.entity;
 
 import com.yenroc.ho.utils.DateUtil;
 

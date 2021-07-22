@@ -1,7 +1,7 @@
 package com.yenroc.ho.runner;
 
 import com.yenroc.ho.common.context.SpringContextHolder;
-import com.yenroc.ho.mapper.BlogCommonMapper;
+import com.yenroc.ho.mapper.base.BlogCommonMapper;
 import com.yenroc.ho.utils.compiler.JavaStringCompiler;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -14,6 +14,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.*;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.spring.mapper.MapperFactoryBean;
 
@@ -42,15 +43,15 @@ public class InitMapperRunner extends ClassPathScanningCandidateComponentProvide
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
 
-    private ScopeMetadataResolver scopeMetadataResolver = new AnnotationScopeMetadataResolver();
-
     static JavaStringCompiler compiler = new JavaStringCompiler();
+
+    MapperHelper mapperHelper = new MapperHelper();
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("开始初始化动态Mapper接口。。");
-
-        String[] classNames = new String[]{"Atest1","Atest2","BTest1"};
+        long start = System.currentTimeMillis();
+        String[] classNames = new String[]{"Atest1","Atest2","BTest1","Ctest1","Ctest2","DTest1","Etest1","Etest2","FTest1","Gtest1","Gtest2","HTest1"};
         for (int i = 0; i < classNames.length; i++) {
             Class clazz = createClass(classNames[i]);
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
@@ -60,7 +61,7 @@ public class InitMapperRunner extends ClassPathScanningCandidateComponentProvide
             definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); // issue #59
             definition.getPropertyValues().add("sqlSessionFactory", sqlSessionFactory);
             definition.getPropertyValues().add("sqlSessionTemplate", sqlSessionTemplate);
-            definition.getPropertyValues().add("mapperHelper", new MapperHelper());
+            definition.getPropertyValues().add("mapperHelper", mapperHelper);
             //将Bean的定义信息修改为  MapperFactoryBean.class
             definition.setBeanClass(MapperFactoryBean.class);
             definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
@@ -69,18 +70,30 @@ public class InitMapperRunner extends ClassPathScanningCandidateComponentProvide
             System.out.println(classNames[i] +"=" + DynamicTestDao);
             System.out.println(classNames[i] + "result=" + DynamicTestDao.selectAll());
         }
-
+        long end = System.currentTimeMillis();
+        System.out.println("加载完成耗时="+(end-start));
     }
 
     private static Class createClass(String className) throws IOException, ClassNotFoundException {
-        String userDirPath = System.getProperty("user.dir") + "\\target\\classes\\";
-        log.info("userDirPath="+userDirPath);
+        StopWatch watch = new StopWatch();
+        watch.start("getProperty");
+        String classDirPath = System.getProperty("user.dir") +  "\\temp\\classes\\"+className+".class";
+        watch.stop();
+        watch.start("getDaoStr");
         String daoStr = getDaoStr(className);
+        watch.stop();
+        watch.start("compile");
         Map<String, byte[]> results = compiler.compile(className+".java", daoStr);
-        FileOutputStream fos = new FileOutputStream(userDirPath + "\\com\\yenroc\\ho\\mapper\\dynamic\\"+className+".class");
+        watch.stop();
+        watch.start("FileOutputStream");
+        FileOutputStream fos = new FileOutputStream(classDirPath);
+        watch.stop();
+        watch.start("write");
         byte[] bytes = results.get("com.yenroc.ho.mapper.dynamic." + className);
         fos.write(bytes,0,bytes.length);
         fos.close();
+        watch.stop();
+        System.out.println(watch.prettyPrint());
         return compiler.loadClass("com.yenroc.ho.mapper.dynamic." + className, results);
     }
 
@@ -88,7 +101,7 @@ public class InitMapperRunner extends ClassPathScanningCandidateComponentProvide
         return  "package com.yenroc.ho.mapper.dynamic;\n" +
                 "\n" +
                 "import com.yenroc.ho.mapper.dynamic.entity.TestDemo;\n" +
-                "import com.yenroc.ho.mapper.BlogCommonMapper;\n" +
+                "import com.yenroc.ho.mapper.common.BlogCommonMapper;\n" +
                 "import org.apache.ibatis.annotations.Mapper;\n" +
                 "\n" +
                 "/**\n" +

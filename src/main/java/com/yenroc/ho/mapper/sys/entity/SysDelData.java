@@ -1,6 +1,6 @@
 package com.yenroc.ho.mapper.sys.entity;
 
-import com.yenroc.ho.mapper.entity.BaseEntity;
+import com.yenroc.ho.mapper.base.entity.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;

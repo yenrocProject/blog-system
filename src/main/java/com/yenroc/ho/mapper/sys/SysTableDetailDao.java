@@ -1,7 +1,7 @@
 package com.yenroc.ho.mapper.sys;
 
 import com.yenroc.ho.mapper.base.BlogCommonMapper;
-import com.yenroc.ho.mapper.sys.entity.SysTableConfig;
+import com.yenroc.ho.mapper.sys.entity.SysTableDetail;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,5 +9,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @date： 2021/7/19
  */
 @Mapper
-public interface SysTableConfigDao extends BlogCommonMapper<SysTableConfig> {
+public interface SysTableDetailDao extends BlogCommonMapper<SysTableDetail> {
 }

@@ -11,7 +11,7 @@ import com.yenroc.ho.common.context.BLogContext;
 import com.yenroc.ho.common.context.SpringContextHolder;
 import com.yenroc.ho.common.service.RedisService;
 import com.yenroc.ho.mapper.sys.SysDelDataDao;
-import com.yenroc.ho.mapper.entity.BaseEntity;
+import com.yenroc.ho.mapper.base.entity.BaseEntity;
 import com.yenroc.ho.mapper.sys.entity.SysDelData;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

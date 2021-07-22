@@ -1,5 +1,6 @@
 package com.yenroc.ho.mapper;
 
+import com.yenroc.ho.mapper.base.BlogCommonMapper;
 import com.yenroc.ho.mapper.entity.Demo;
 
 import java.util.List;
