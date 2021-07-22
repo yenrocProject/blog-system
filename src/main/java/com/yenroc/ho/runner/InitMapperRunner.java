@@ -3,6 +3,8 @@ package com.yenroc.ho.runner;
 import com.yenroc.ho.common.context.SpringContextHolder;
 import com.yenroc.ho.mapper.base.BlogCommonMapper;
 import com.yenroc.ho.utils.compiler.JavaStringCompiler;
+import com.yenroc.ho.utils.compiler.MemoryClassLoader;
+import com.yenroc.ho.utils.dd.DynamicLoader;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -43,7 +45,7 @@ public class InitMapperRunner extends ClassPathScanningCandidateComponentProvide
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
 
-    static JavaStringCompiler compiler = new JavaStringCompiler();
+
 
     MapperHelper mapperHelper = new MapperHelper();
 
@@ -56,8 +58,11 @@ public class InitMapperRunner extends ClassPathScanningCandidateComponentProvide
             Class clazz = createClass(classNames[i]);
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
             GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
-            String beanClassName = definition.getBeanClassName();
 
+            DynamicLoader.MemoryClassLoader classLoader = new DynamicLoader.MemoryClassLoader(null);
+            defaultListableBeanFactory.setBeanClassLoader(classLoader);
+
+            String beanClassName = definition.getBeanClassName();
             definition.getConstructorArgumentValues().addGenericArgumentValue(beanClassName); // issue #59
             definition.getPropertyValues().add("sqlSessionFactory", sqlSessionFactory);
             definition.getPropertyValues().add("sqlSessionTemplate", sqlSessionTemplate);
@@ -74,34 +79,39 @@ public class InitMapperRunner extends ClassPathScanningCandidateComponentProvide
         System.out.println("加载完成耗时="+(end-start));
     }
 
-    private static Class createClass(String className) throws IOException, ClassNotFoundException {
+    private Class createClass(String className) throws ClassNotFoundException {
         StopWatch watch = new StopWatch();
         watch.start("getProperty");
-        String classDirPath = System.getProperty("user.dir") +  "\\temp\\classes\\"+className+".class";
+//        String classDirPath = System.getProperty("user.dir") +  "\\"+className+".class";
         watch.stop();
         watch.start("getDaoStr");
         String daoStr = getDaoStr(className);
         watch.stop();
         watch.start("compile");
-        Map<String, byte[]> results = compiler.compile(className+".java", daoStr);
+//        JavaStringCompiler compiler = new JavaStringCompiler();
+//        Map<String, byte[]> results = compiler.compile(className+".java", daoStr);
+        Map<String, byte[]> results = DynamicLoader.compile(className+".java", daoStr);
         watch.stop();
-        watch.start("FileOutputStream");
-        FileOutputStream fos = new FileOutputStream(classDirPath);
-        watch.stop();
-        watch.start("write");
-        byte[] bytes = results.get("com.yenroc.ho.mapper.dynamic." + className);
-        fos.write(bytes,0,bytes.length);
-        fos.close();
-        watch.stop();
+
+//        watch.start("FileOutputStream");
+//        FileOutputStream fos = new FileOutputStream(classDirPath);
+//        watch.stop();
+//        watch.start("write");
+//        byte[] bytes = results.get("com.yenroc.ho.mapper.dynamic." + className);
+//        fos.write(bytes,0,bytes.length);
+//        fos.close();
+//        watch.stop();
         System.out.println(watch.prettyPrint());
-        return compiler.loadClass("com.yenroc.ho.mapper.dynamic." + className, results);
+//        return compiler.loadClass("com.yenroc.ho.mapper.dynamic." + className, results);
+        DynamicLoader.MemoryClassLoader classLoader = new DynamicLoader.MemoryClassLoader(results);
+        return classLoader.loadClass("com.yenroc.ho.mapper.dynamic." + className);
     }
 
     private static String getDaoStr(String className) {
         return  "package com.yenroc.ho.mapper.dynamic;\n" +
                 "\n" +
-                "import com.yenroc.ho.mapper.dynamic.entity.TestDemo;\n" +
-                "import com.yenroc.ho.mapper.common.BlogCommonMapper;\n" +
+                "import com.yenroc.ho.mapper.entity.Demo;\n" +
+                "import com.yenroc.ho.mapper.base.BlogCommonMapper;\n" +
                 "import org.apache.ibatis.annotations.Mapper;\n" +
                 "\n" +
                 "/**\n" +
@@ -109,7 +119,7 @@ public class InitMapperRunner extends ClassPathScanningCandidateComponentProvide
                 " * @date： 2021/7/20\n" +
                 " */\n" +
                 "@Mapper\n" +
-                "public interface "+className+" extends BlogCommonMapper<TestDemo> {\n" +
+                "public interface "+className+" extends BlogCommonMapper<Demo> {\n" +
                 "}\n";
     }
 

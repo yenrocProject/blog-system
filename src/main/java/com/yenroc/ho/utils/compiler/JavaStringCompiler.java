@@ -25,7 +25,7 @@ public class JavaStringCompiler {
     StandardJavaFileManager stdManager;
 
     public JavaStringCompiler() {
-        this.stdManager = this.compiler.getStandardFileManager((DiagnosticListener)null, (Locale)null, (Charset)null);
+        this.stdManager = this.compiler.getStandardFileManager(null, null, null);
     }
 
     public Map<String, byte[]> compile(String fileName, String source) throws IOException {
@@ -35,7 +35,7 @@ public class JavaStringCompiler {
         Map var8;
         try {
             JavaFileObject javaFileObject = manager.makeStringSource(fileName, source);
-            CompilationTask task = this.compiler.getTask((Writer)null, manager, (DiagnosticListener)null, (Iterable)null, (Iterable)null, Arrays.asList(javaFileObject));
+            CompilationTask task = this.compiler.getTask((Writer)null, manager, null, null, null, Arrays.asList(javaFileObject));
             Boolean result = task.call();
             if (result == null || !result) {
                 throw new RuntimeException("Compilation failed.");
